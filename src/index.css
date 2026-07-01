@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background: #0a0a0f;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+.cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.dot-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .3; }
+}
+
+.card-glow {
+  box-shadow: 0 0 40px rgba(192, 132, 252, .08);
+}
+
+.tab-active {
+  border-bottom: 2px solid #c084fc;
+  color: #c084fc;
+}
+
+.tab-inactive {
+  border-bottom: 2px solid transparent;
+  color: #64748b;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #1e1e2e 25%, #2a2a3e 50%, #1e1e2e 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+img.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e1e2e;
+  border-radius: 4px;
+}
+
+tbody tr {
+  cursor: pointer;
+}
+
+/* Tooltips e items de equipamiento */
+.item-tooltip {
+  display: none;
+}
+
+.item-box:hover .item-tooltip {
+  display: block;
+}
+
+/* Animación de deslizamiento lateral del Drawer */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.animate-slide-in {
+  animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
