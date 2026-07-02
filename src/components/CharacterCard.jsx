@@ -16,11 +16,38 @@ export default function CharacterCard({ profileData, rankingData, isLoading, onL
   // La API puede devolver guild como objeto {name, mark, score, master} o como string
   const guildName = ch.guild && typeof ch.guild === 'object' ? ch.guild.name : ch.guild
   const ranking = rankingData || []
-  
+
   const topGs = ranking.length ? Math.max(...ranking.map(r => r.GearScore)) : 0
   const me = ranking.find(r => r.Name.toLowerCase() === ch.name?.toLowerCase())
 
   const locStatus = getLocationStatus(ch.location, ch.isOnline)
+
+  // Todos los cálculos derivados aquí para que estén disponibles antes de los hooks
+  const rank = me ? '#' + me.RankingPos : '—'
+  const mlNum = me ? parseInt(me.MasterLevel) : 0
+  const expVal = me ? parseInt(me.MasterExperience) || 0 : 0
+  const delta = ch.name ? getExpDelta(ch.name, expVal) : null
+  const deltaStr = delta ? ` (+${formatNum(delta)})` : ''
+  const expForNext = expForML(mlNum + 1)
+  const expForCurr = expForML(mlNum)
+  const pct = me ? Math.min(100, Math.max(0, ((expVal - expForCurr) / (expForNext - expForCurr)) * 100)) : 0
+  const missing = me ? Math.max(0, expForNext - expVal) : 0
+
+  // Cálculos de Nivel Normal (0 → 400)
+  const MAX_LEVEL = 400
+  const lvl = ch.level ? parseInt(ch.level) : 0
+  const lvlPct = Math.min(100, Math.max(0, (lvl / MAX_LEVEL) * 100))
+  const lvlMissing = Math.max(0, MAX_LEVEL - lvl)
+  const nearMax = lvl >= 390 && lvl < MAX_LEVEL
+  const atMax = lvl >= MAX_LEVEL
+
+  // SVG Config (compartido por ambos anillos)
+  const radius = 38
+  const stroke = 4.5
+  const normalizedRadius = radius - stroke * 2
+  const circumference = normalizedRadius * 2 * Math.PI
+  const strokeDashoffset = circumference - (pct / 100) * circumference
+  const lvlStrokeDashoffset = circumference - (lvlPct / 100) * circumference
 
   // Web Notification API Trigger
   const triggerSystemNotification = (charName, text) => {
@@ -28,29 +55,43 @@ export default function CharacterCard({ profileData, rankingData, isLoading, onL
       try {
         new Notification(`MU Monitor · ${charName}`, {
           body: `El estado del personaje cambió a: ${text}`,
-          tag: charName // Evita notificaciones duplicadas para el mismo personaje
+          tag: charName
         })
-      } catch (e) {
-        // En algunos entornos móviles puede fallar
-      }
+      } catch (e) {}
     }
   }
 
   useEffect(() => {
     if (!isLoading && ch.name) {
       const statusText = locStatus ? locStatus.text : 'Offline 💀'
-      // Si el estado anterior existía y es diferente del actual
       if (prevLocStatusRef.current !== null && prevLocStatusRef.current !== statusText) {
-        // Disparar callback visual (Toast)
         if (onLocationStatusChange) {
           onLocationStatusChange(locStatus || { text: '💀 Desconectado', color: 'text-red-400', bg: 'rgba(239,68,68,.15)', border: '#ef4444' })
         }
-        // Disparar notificación nativa de sistema
         triggerSystemNotification(ch.name, statusText)
       }
       prevLocStatusRef.current = statusText
     }
   }, [ch.name, locStatus, isLoading, onLocationStatusChange])
+
+  // Alerta: nivel 400 próximo (≤10 niveles)
+  const prevLvlAlertRef = useRef(false)
+
+  useEffect(() => {
+    if (!isLoading && ch.name && nearMax && !prevLvlAlertRef.current) {
+      prevLvlAlertRef.current = true
+      // Notificación de sistema
+      if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification(`🚀 MU Monitor · ${ch.name}`, {
+            body: `¡Solo faltan ${lvlMissing} niveles para llegar al nivel 400!`,
+            tag: `${ch.name}-lvl400`
+          })
+        } catch (e) {}
+      }
+    }
+    if (!nearMax) prevLvlAlertRef.current = false
+  }, [isLoading, ch.name, nearMax, lvlMissing])
 
   // Guardar EXP base inicial al cargar el personaje por primera vez
   useEffect(() => {
@@ -82,26 +123,6 @@ export default function CharacterCard({ profileData, rankingData, isLoading, onL
     )
   }
 
-  // Cálculos de Master Level
-  const rank = me ? '#' + me.RankingPos : '—'
-  const mlVal = me ? me.MasterLevel : 0
-  const expVal = me ? parseInt(me.MasterExperience) || 0 : 0
-  const delta = ch.name ? getExpDelta(ch.name, expVal) : null
-  const deltaStr = delta ? ` (+${formatNum(delta)})` : ''
-
-  // Círculo SVG de progreso
-  const mlNum = me ? parseInt(me.MasterLevel) : 0
-  const expForNext = expForML(mlNum + 1)
-  const expForCurr = expForML(mlNum)
-  const pct = me ? Math.min(100, Math.max(0, ((expVal - expForCurr) / (expForNext - expForCurr)) * 100)) : 0
-  const missing = me ? Math.max(0, expForNext - expVal) : 0
-
-  // SVG Config
-  const radius = 38
-  const stroke = 4.5
-  const normalizedRadius = radius - stroke * 2
-  const circumference = normalizedRadius * 2 * Math.PI
-  const strokeDashoffset = circumference - (pct / 100) * circumference
 
   return (
     <div className="bg-[#11131e] border border-[#1f2937] rounded-3xl p-6 card-glow flex flex-col gap-6 relative overflow-hidden">
@@ -243,30 +264,103 @@ export default function CharacterCard({ profileData, rankingData, isLoading, onL
           </div>
         </div>
 
-        {/* Stats de combate resumidos */}
-        <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-5 space-y-3.5">
-          <h4 className="text-xs text-slate-400 font-bold uppercase tracking-wider">Combate y Puntos</h4>
-          
-          <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="flex items-center justify-between bg-black/20 p-2.5 rounded-xl border border-white/5">
-              <span className="text-slate-500 font-semibold uppercase text-[9px]">Vida</span>
-              <span className="text-slate-200 font-bold text-[#34d399]">{combat.maxLife !== undefined ? formatNum(combat.maxLife) : 0}</span>
+        {/* Nivel Normal 0→400 progress ring */}
+        <div className={`bg-white/[0.02] border rounded-3xl p-5 flex items-center justify-between gap-5 transition-colors ${
+          atMax
+            ? 'border-[#fbbf24]/40 shadow-lg shadow-[#fbbf24]/5'
+            : nearMax
+            ? 'border-[#f97316]/40 shadow-lg shadow-[#f97316]/5 animate-pulse-slow'
+            : 'border-white/5'
+        }`}>
+          <div className="flex-1 space-y-1.5">
+            <h4 className="text-xs text-slate-400 font-bold uppercase tracking-wider flex items-center gap-2">
+              Nivel General
+              {atMax && <span className="text-[#fbbf24] text-[9px] font-black uppercase tracking-widest bg-[#fbbf24]/10 px-1.5 py-0.5 rounded-full">MAX ✓</span>}
+              {nearMax && !atMax && <span className="text-[#f97316] text-[9px] font-black uppercase tracking-widest bg-[#f97316]/10 px-1.5 py-0.5 rounded-full animate-pulse">¡CERCA!</span>}
+            </h4>
+            <div className="text-sm font-semibold text-slate-200">
+              Nivel <span className={`font-bold ${atMax ? 'text-[#fbbf24]' : nearMax ? 'text-[#f97316]' : 'text-[#fbbf24]'}`}>{lvl}</span>
+              <span className="text-slate-600 text-xs"> / {MAX_LEVEL}</span>
             </div>
-            <div className="flex items-center justify-between bg-black/20 p-2.5 rounded-xl border border-white/5">
-              <span className="text-slate-500 font-semibold uppercase text-[9px]">Mana</span>
-              <span className="text-slate-200 font-bold text-[#60a5fa]">{combat.maxMana !== undefined ? formatNum(combat.maxMana) : 0}</span>
-            </div>
-            <div className="flex items-center justify-between bg-black/20 p-2.5 rounded-xl border border-white/5">
-              <span className="text-slate-500 font-semibold uppercase text-[9px]">BP</span>
-              <span className="text-slate-200 font-bold text-[#fbbf24]">{combat.maxBP !== undefined ? formatNum(combat.maxBP) : 0}</span>
-            </div>
-            <div className="flex items-center justify-between bg-black/20 p-2.5 rounded-xl border border-white/5">
-              <span className="text-slate-500 font-semibold uppercase text-[9px]">Escudo</span>
-              <span className="text-slate-200 font-bold text-[#94a3b8]">{combat.shield !== undefined ? formatNum(combat.shield) : 0}</span>
-            </div>
+            {!atMax && (
+              <div className="text-[10px] text-slate-500">
+                Faltan: <span className={`font-bold ${nearMax ? 'text-[#f97316]' : 'text-slate-400'}`}>{lvlMissing} niveles</span>
+              </div>
+            )}
+            {atMax && (
+              <div className="text-[10px] text-[#fbbf24] font-semibold">¡Nivel máximo alcanzado! 🏆</div>
+            )}
+          </div>
+
+          {/* SVG ring nivel normal — color dorado/naranja */}
+          <div className="shrink-0 flex flex-col items-center gap-1.5">
+            <svg
+              width="96"
+              height="96"
+              viewBox={`0 0 ${radius * 2} ${radius * 2}`}
+              className="block"
+            >
+              <circle
+                stroke="rgba(255,255,255,0.04)"
+                fill="transparent"
+                strokeWidth={stroke}
+                r={normalizedRadius}
+                cx={radius}
+                cy={radius}
+              />
+              <circle
+                stroke={atMax ? '#fbbf24' : nearMax ? '#f97316' : '#fbbf24'}
+                fill="transparent"
+                strokeWidth={stroke}
+                strokeDasharray={`${circumference} ${circumference}`}
+                strokeDashoffset={lvlStrokeDashoffset}
+                strokeLinecap="round"
+                r={normalizedRadius}
+                cx={radius}
+                cy={radius}
+                style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%', transition: 'stroke-dashoffset 0.7s ease' }}
+              />
+              <text
+                x={radius}
+                y={radius}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill={nearMax && !atMax ? '#f97316' : '#fbbf24'}
+                fontSize="13"
+                fontWeight="800"
+                fontFamily="Outfit, sans-serif"
+              >
+                {lvlPct.toFixed(0)}%
+              </text>
+            </svg>
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">Progreso Lvl</span>
           </div>
         </div>
       </div>
+
+      {/* Combate y Puntos — ancho completo */}
+      <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-5 space-y-3">
+        <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold block">Combate y Puntos</span>
+        <div className="grid grid-cols-4 gap-2">
+          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
+            <div className="text-[8px] text-slate-500 uppercase">Vida</div>
+            <div className="text-xs font-bold text-[#34d399] mt-0.5">{combat.maxLife !== undefined ? formatNum(combat.maxLife) : 0}</div>
+          </div>
+          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
+            <div className="text-[8px] text-slate-500 uppercase">Mana</div>
+            <div className="text-xs font-bold text-[#60a5fa] mt-0.5">{combat.maxMana !== undefined ? formatNum(combat.maxMana) : 0}</div>
+          </div>
+          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
+            <div className="text-[8px] text-slate-500 uppercase">BP</div>
+            <div className="text-xs font-bold text-[#fbbf24] mt-0.5">{combat.maxBP !== undefined ? formatNum(combat.maxBP) : 0}</div>
+          </div>
+          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
+            <div className="text-[8px] text-slate-500 uppercase">Escudo</div>
+            <div className="text-xs font-bold text-[#94a3b8] mt-0.5">{combat.shield !== undefined ? formatNum(combat.shield) : 0}</div>
+          </div>
+        </div>
+      </div>
+
 
       {/* Grid de Stats Base (Colapsable o pequeña al final) */}
       <div className="border-t border-white/5 pt-4">
