@@ -21,6 +21,7 @@ export default function Dashboard() {
     queryKey: ['character', selectedCharacterName?.toLowerCase()],
     queryFn: () => fetchProfile(selectedCharacterName),
     enabled: !!selectedCharacterName,
+    refetchInterval: 15000, // Refrescar cada 15 segundos
   })
 
   const classId = profileData?.character?.class

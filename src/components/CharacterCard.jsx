@@ -20,7 +20,7 @@ export default function CharacterCard({ profileData, rankingData, isLoading, onL
   const topGs = ranking.length ? Math.max(...ranking.map(r => r.GearScore)) : 0
   const me = ranking.find(r => r.Name.toLowerCase() === ch.name?.toLowerCase())
 
-  const locStatus = getLocationStatus(ch.location, ch.isOnline)
+  const locStatus = getLocationStatus(ch.location)
 
   // Todos los cálculos derivados aquí para que estén disponibles antes de los hooks
   const rank = me ? '#' + me.RankingPos : '—'
@@ -152,6 +152,14 @@ export default function CharacterCard({ profileData, rankingData, isLoading, onL
                 <span className={`${locStatus.color} font-bold`}>{locStatus.text}</span>
               ) : (
                 <span className="text-red-500 font-bold">Offline 💀</span>
+              )}
+              {ch.location && (
+                <>
+                  <span>•</span>
+                  <span className="text-slate-400">
+                    Pos: M.{ch.location.map} ({ch.location.x}, {ch.location.y})
+                  </span>
+                </>
               )}
             </div>
           </div>

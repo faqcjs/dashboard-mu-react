@@ -10,7 +10,7 @@ export default function AccountStatusCard({ name }) {
   const { data: profileData, isLoading } = useQuery({
     queryKey: ['character', name.toLowerCase()],
     queryFn: () => fetchProfile(name),
-    refetchInterval: 60000, // Actualizar cada minuto el estado general
+    refetchInterval: 15000, // Actualizar cada 15 segundos el estado general
   })
 
   const isActive = selectedCharacterName?.toLowerCase() === name.toLowerCase()
@@ -28,7 +28,7 @@ export default function AccountStatusCard({ name }) {
   }
 
   const ch = profileData?.character || {}
-  const locStatus = getLocationStatus(ch.location, ch.isOnline)
+  const locStatus = getLocationStatus(ch.location)
 
   return (
     <div

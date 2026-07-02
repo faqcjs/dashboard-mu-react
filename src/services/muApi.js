@@ -26,6 +26,7 @@ export const SAFE_ZONES = [
   { map: 38, x: 71, y: 106 },
   { map: 4, x: 94, y: 86 },
   { map: 4, x: 20, y: 217 },
+  { map: 96, x: 53, y: 193 },
 ]
 export const SAFE_RADIUS = 5
 
@@ -53,11 +54,23 @@ export function expForML(n) {
   return n * (35208100 + n * 240000)
 }
 
-export function getLocationStatus(location, isOnline) {
-  if (!isOnline) return null // Si está offline no mostramos estado de ubicación o lo mostramos como desconectado
+export function getLocationStatus(location) {
+  // El dato isOnline de la API no es confiable, se determina por ubicación
   if (!location) return { text: '⚔️ Farmeando', color: 'text-[#f97316]', bg: 'rgba(249,115,22,.15)', border: '#f97316' }
-  const { map, x, y } = location
-  const inSafe = SAFE_ZONES.some(z => z.map === map && Math.abs(z.x - x) <= SAFE_RADIUS && Math.abs(z.y - y) <= SAFE_RADIUS)
+  const map = parseInt(location.map)
+  const x = parseInt(location.x)
+  const y = parseInt(location.y)
+
+  if (isNaN(map) || isNaN(x) || isNaN(y)) {
+    return { text: '⚔️ Farmeando', color: 'text-[#f97316]', bg: 'rgba(249,115,22,.15)', border: '#f97316' }
+  }
+
+  const inSafe = SAFE_ZONES.some(z => {
+    return parseInt(z.map) === map &&
+      Math.abs(parseInt(z.x) - x) <= SAFE_RADIUS &&
+      Math.abs(parseInt(z.y) - y) <= SAFE_RADIUS
+  })
+
   return inSafe
     ? { text: '🛡️ En safe', color: 'text-[#34d399]', bg: 'rgba(52,211,153,.15)', border: '#34d399' }
     : { text: '⚔️ Farmeando', color: 'text-[#f97316]', bg: 'rgba(249,115,22,.15)', border: '#f97316' }

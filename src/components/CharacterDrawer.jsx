@@ -38,7 +38,7 @@ export default function CharacterDrawer({ name, onClose }) {
   const meRank = ranking.find(r => r.Name.toLowerCase() === ch.name?.toLowerCase())
   const rank = meRank ? '#' + meRank.RankingPos : '—'
   const mlVal = meRank ? meRank.MasterLevel : '—'
-  const mLoc = getLocationStatus(ch.location, ch.isOnline)
+  const mLoc = getLocationStatus(ch.location)
 
   return (
     <div
@@ -137,11 +137,16 @@ export default function CharacterDrawer({ name, onClose }) {
                   </div>
                   <div>
                     <div className="text-xs font-semibold text-slate-300">{guildName || 'Sin guild'}</div>
-                    <div className="text-xs mt-1">
+                    <div className="text-xs mt-1 flex items-center gap-1.5 flex-wrap">
                       {mLoc ? (
                         <span className={`${mLoc.color} font-medium`}>{mLoc.text}</span>
                       ) : (
                         <span className="text-slate-500 font-medium">Offline</span>
+                      )}
+                      {ch.location && (
+                        <span className="text-[10px] text-slate-500 font-medium">
+                          ({ch.location.map}:{ch.location.x},{ch.location.y})
+                        </span>
                       )}
                     </div>
                   </div>

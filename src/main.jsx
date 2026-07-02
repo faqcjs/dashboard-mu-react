@@ -8,8 +8,8 @@ import App from './App.jsx'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false, // Evita refetches molestos al cambiar de pestaña en el navegador
-      staleTime: 60000, // Los datos se consideran frescos por 1 minuto
+      refetchOnWindowFocus: true, // Auto-refetch when window is focused
+      staleTime: 5000, // Los datos se consideran frescos por 5 segundos
     },
   },
 })
