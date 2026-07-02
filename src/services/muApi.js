@@ -27,6 +27,7 @@ export const SAFE_ZONES = [
   { map: 4, x: 94, y: 86 },
   { map: 4, x: 20, y: 217 },
   { map: 96, x: 53, y: 193 },
+  { map: 33, x: 86, y: 9 },
 ]
 export const SAFE_RADIUS = 5
 
