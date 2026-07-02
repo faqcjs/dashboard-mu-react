@@ -11,7 +11,7 @@ export default function Dashboard() {
   const { characterNames, selectedCharacterName, addCharacterName } = useCharacterStore()
   const [searchInput, setSearchInput] = useState('')
   const [drawerCharacterName, setDrawerCharacterName] = useState(null)
-  
+
   // Estado para el toast de ubicación
   const [toast, setToast] = useState(null)
   const toastTimeoutRef = useRef(null)
@@ -41,7 +41,7 @@ export default function Dashboard() {
 
   const handleLocationStatusChange = (status) => {
     if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current)
-    
+
     setToast(status)
     toastTimeoutRef.current = setTimeout(() => {
       setToast(null)
@@ -86,19 +86,13 @@ export default function Dashboard() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
-      
+
       {/* Sección 1: Panel de Monitoreo General */}
       <div>
         <div className="flex justify-between items-center mb-3">
           <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
             Monitoreo en Vivo
           </h3>
-          <button
-            onClick={handlePromptAdd}
-            className="text-xs text-[#c084fc] hover:text-white font-bold transition-colors focus:outline-none"
-          >
-            + Agregar Cuenta
-          </button>
         </div>
 
         {/* Grid de cuentas en vivo */}
@@ -124,7 +118,7 @@ export default function Dashboard() {
           <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
             Estadísticas Detalladas
           </h3>
-          
+
           {/* Pequeño buscador de perfiles rápido */}
           <form onSubmit={handleSearchSubmit} className="flex gap-2">
             <input

@@ -14,14 +14,14 @@ export default function CharacterTabs() {
   const handlePromptAdd = async () => {
     const name = prompt('Nombre del nuevo personaje:')
     if (!name?.trim()) return
-    
+
     try {
       // Verificar si ya existe en la lista local antes de hacer fetch
       if (characterNames.some(n => n.toLowerCase() === name.trim().toLowerCase())) {
         alert('El personaje ya está agregado.')
         return
       }
-      
+
       const profile = await fetchProfile(name.trim())
       addCharacterName(profile.character.name)
     } catch (e) {
@@ -41,9 +41,8 @@ export default function CharacterTabs() {
           <button
             key={name}
             onClick={() => setSelectedCharacterName(name)}
-            className={`${
-              isActive ? 'tab-active' : 'tab-inactive'
-            } cinzel text-xs tracking-widest py-3 px-1 whitespace-nowrap transition-colors flex items-center gap-1.5 focus:outline-none`}
+            className={`${isActive ? 'tab-active' : 'tab-inactive'
+              } cinzel text-xs tracking-widest py-3 px-1 whitespace-nowrap transition-colors flex items-center gap-1.5 focus:outline-none`}
           >
             {name}
             <span
