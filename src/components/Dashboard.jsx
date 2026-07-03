@@ -70,24 +70,7 @@ export default function Dashboard() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
 
-      {/* Sección 1: Panel de Monitoreo General */}
-      <div>
-        <div className="flex justify-between items-center mb-3">
-          <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
-            Monitoreo en Vivo
-          </h3>
-        </div>
-
-        {/* Grid de cuentas en vivo */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          {characterNames.map((name) => (
-            <AccountStatusCard key={name} name={name} />
-          ))}
-
-        </div>
-      </div>
-
-      {/* Sección 2: Ficha Detallada del Personaje Activo */}
+      {/* Sección 1: Ficha Detallada del Personaje Activo */}
       <div>
         <div className="flex justify-between items-center mb-3">
           <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
@@ -113,18 +96,34 @@ export default function Dashboard() {
           isLoading={isLoading}
           onLocationStatusChange={handleLocationStatusChange}
         />
+      </div>
 
-        {/* Botón rápido dashed para agregar */}
-        <div className="mt-4">
+      {/* Sección 2: Panel de Monitoreo General */}
+      <div>
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
+            Monitoreo en Vivo
+          </h3>
+        </div>
+
+        {/* Grid de cuentas en vivo */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          {characterNames.map((name) => (
+            <AccountStatusCard key={name} name={name} />
+          ))}
+
+          {/* Botón rápido dashed para agregar */}
           <div
             onClick={openAddCharacterModal}
-            className="border-2 border-dashed border-[#1f2937] hover:border-slate-600 rounded-2xl p-4 flex items-center justify-center gap-2 cursor-pointer text-slate-500 hover:text-slate-300 transition-all h-16"
+            className="border border-dashed border-[#1f2937] hover:border-[#c084fc]/40 rounded-2xl flex items-center justify-center gap-1.5 cursor-pointer text-slate-500 hover:text-[#c084fc]/80 transition-all h-16 bg-[#11131e]/30 hover:bg-[#11131e]/50"
           >
-            <span className="text-lg font-bold leading-none">+</span>
-            <span className="text-xs font-semibold uppercase tracking-wider">Añadir cuenta</span>
+            <span className="text-base font-bold leading-none">+</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider">Añadir</span>
           </div>
         </div>
       </div>
+
+
 
       {/* Drawer deslizante derecho de inspección */}
       {drawerCharacterName && (
