@@ -1,10 +1,12 @@
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useCharacterStore } from '../store/useCharacterStore'
+import { useUIStore } from '../store/useUIStore'
 import { fetchProfile, getLocationStatus } from '../services/muApi'
 
 export default function AccountStatusCard({ name }) {
   const { selectedCharacterName, setSelectedCharacterName, removeCharacterName } = useCharacterStore()
+  const { showConfirm } = useUIStore()
 
   // Query silenciosa para obtener el estado del personaje en el grid de monitoreo
   const { data: profileData, isLoading } = useQuery({
@@ -56,9 +58,11 @@ export default function AccountStatusCard({ name }) {
         <button
           onClick={(e) => {
             e.stopPropagation()
-            if (confirm(`¿Quitar a ${name} del monitoreo?`)) {
-              removeCharacterName(name)
-            }
+            showConfirm({
+              title: 'Quitar del monitoreo',
+              message: `¿Estás seguro de que querés quitar a ${name} del monitoreo en vivo?`,
+              onConfirm: () => removeCharacterName(name)
+            })
           }}
           className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 font-bold transition-opacity p-1 text-sm leading-none focus:outline-none"
           title="Eliminar"

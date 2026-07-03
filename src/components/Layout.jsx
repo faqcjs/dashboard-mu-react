@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCharacterStore } from '../store/useCharacterStore'
+import UIProvider from './UIProvider'
 
 export default function Layout({ children }) {
   const location = useLocation()
@@ -208,6 +209,7 @@ export default function Layout({ children }) {
           )
         })}
       </nav>
+      <UIProvider />
     </div>
   )
 }

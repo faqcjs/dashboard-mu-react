@@ -1,36 +1,23 @@
 import React from 'react'
 import { useCharacterStore } from '../store/useCharacterStore'
-import { fetchProfile } from '../services/muApi'
+import { useUIStore } from '../store/useUIStore'
 
 export default function CharacterTabs() {
   const {
     characterNames,
     selectedCharacterName,
     setSelectedCharacterName,
-    removeCharacterName,
-    addCharacterName
+    removeCharacterName
   } = useCharacterStore()
 
-  const handlePromptAdd = async () => {
-    const name = prompt('Nombre del nuevo personaje:')
-    if (!name?.trim()) return
+  const { openAddCharacterModal, showConfirm } = useUIStore()
 
-    try {
-      // Verificar si ya existe en la lista local antes de hacer fetch
-      if (characterNames.some(n => n.toLowerCase() === name.trim().toLowerCase())) {
-        alert('El personaje ya está agregado.')
-        return
-      }
-
-      const profile = await fetchProfile(name.trim())
-      addCharacterName(profile.character.name)
-    } catch (e) {
-      if (e.message.includes('no encontrado') || e.message.includes('404')) {
-        alert('No se encontró el personaje. Revisá el nombre.')
-      } else {
-        alert('Error de conexión o personaje inexistente.')
-      }
-    }
+  const handleRemove = (name) => {
+    showConfirm({
+      title: 'Quitar personaje',
+      message: `¿Quitar a ${name} del monitoreo?`,
+      onConfirm: () => removeCharacterName(name)
+    })
   }
 
   return (
@@ -48,7 +35,7 @@ export default function CharacterTabs() {
             <span
               onClick={(e) => {
                 e.stopPropagation()
-                removeCharacterName(name)
+                handleRemove(name)
               }}
               className="text-slate-600 hover:text-red-400 transition-colors text-base leading-none ml-1 cursor-pointer"
               title="Quitar"
@@ -59,7 +46,7 @@ export default function CharacterTabs() {
         )
       })}
       <button
-        onClick={handlePromptAdd}
+        onClick={openAddCharacterModal}
         className="ml-2 text-slate-600 hover:text-[#c084fc] transition-colors text-lg leading-none py-3 shrink-0 focus:outline-none"
         title="Agregar personaje"
       >

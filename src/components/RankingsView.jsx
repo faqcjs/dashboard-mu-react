@@ -7,6 +7,7 @@ import CharacterDrawer from './CharacterDrawer'
 
 // Opciones de clases únicas para el filtro
 const CLASS_FILTERS = [
+  { id: 'all', name: 'Todas las Razas' },
   { id: 0, name: 'Dark Wizard' },
   { id: 1, name: 'Dark Knight' },
   { id: 33, name: 'Elf' },
@@ -20,30 +21,19 @@ export default function RankingsView() {
   const { selectedCharacterName } = useCharacterStore()
   const [searchInput, setSearchInput] = useState('')
   const [drawerCharacterName, setDrawerCharacterName] = useState(null)
-  const [classFilterId, setClassFilterId] = useState(null)
+  const [classFilterId, setClassFilterId] = useState('all')
 
-  // Query 1: Obtener el perfil del personaje seleccionado para saber su clase por defecto
-  const { data: profileData, isLoading: isProfileLoading } = useQuery({
+  // Query 1: Obtener el perfil del personaje seleccionado (para resaltar o uso secundario)
+  const { data: profileData } = useQuery({
     queryKey: ['character', selectedCharacterName?.toLowerCase()],
     queryFn: () => fetchProfile(selectedCharacterName),
     enabled: !!selectedCharacterName,
   })
 
-  const activeClassId = profileData?.character?.class
-
-  // Sincronizar clase activa con el filtro si no se ha elegido uno manual
-  useEffect(() => {
-    if (activeClassId !== undefined && classFilterId === null) {
-      setClassFilterId(activeClassId)
-    }
-  }, [activeClassId, classFilterId])
-
-  // Query 2: Obtener ranking filtrado
-  const effectiveClassId = classFilterId !== null ? classFilterId : (activeClassId !== undefined ? activeClassId : 0)
+  // Query 2: Obtener ranking filtrado (empieza en 'all')
   const { data: rankingData, isLoading: isRankingLoading } = useQuery({
-    queryKey: ['ranking', effectiveClassId],
-    queryFn: () => fetchRanking(effectiveClassId),
-    enabled: effectiveClassId !== null,
+    queryKey: ['ranking', classFilterId],
+    queryFn: () => fetchRanking(classFilterId),
   })
 
   const handleSearchSubmit = (e) => {
@@ -56,11 +46,12 @@ export default function RankingsView() {
   }
 
   const handleClassChange = (e) => {
-    setClassFilterId(parseInt(e.target.value))
+    const val = e.target.value
+    setClassFilterId(val === 'all' ? 'all' : parseInt(val))
   }
 
-  const currentClassInfo = classInfo(effectiveClassId)
-  const isLoading = isProfileLoading || isRankingLoading
+  const currentClassInfo = classInfo(classFilterId)
+  const isLoading = isRankingLoading
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
@@ -100,7 +91,7 @@ export default function RankingsView() {
         </div>
 
         <select
-          value={effectiveClassId}
+          value={classFilterId}
           onChange={handleClassChange}
           className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-300 focus:outline-none focus:border-[#c084fc]/60 transition-colors w-full sm:w-auto"
         >

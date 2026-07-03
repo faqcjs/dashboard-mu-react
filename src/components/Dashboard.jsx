@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useCharacterStore } from '../store/useCharacterStore'
+import { useUIStore } from '../store/useUIStore'
 import { fetchProfile, fetchRanking, classInfo } from '../services/muApi'
 import Onboarding from './Onboarding'
 import AccountStatusCard from './AccountStatusCard'
@@ -8,7 +9,8 @@ import CharacterCard from './CharacterCard'
 import CharacterDrawer from './CharacterDrawer'
 
 export default function Dashboard() {
-  const { characterNames, selectedCharacterName, addCharacterName } = useCharacterStore()
+  const { characterNames, selectedCharacterName } = useCharacterStore()
+  const { openAddCharacterModal } = useUIStore()
   const [searchInput, setSearchInput] = useState('')
   const [drawerCharacterName, setDrawerCharacterName] = useState(null)
 
@@ -58,26 +60,6 @@ export default function Dashboard() {
     }
   }
 
-  const handlePromptAdd = async () => {
-    const name = prompt('Nombre del nuevo personaje a monitorear:')
-    if (!name?.trim()) return
-
-    try {
-      if (characterNames.some(n => n.toLowerCase() === name.trim().toLowerCase())) {
-        alert('El personaje ya está agregado.')
-        return
-      }
-      const profile = await fetchProfile(name.trim())
-      addCharacterName(profile.character.name)
-    } catch (e) {
-      if (e.message.includes('no encontrado') || e.message.includes('404')) {
-        alert('No se encontró el personaje. Revisá el nombre.')
-      } else {
-        alert('Error de conexión o personaje inexistente.')
-      }
-    }
-  }
-
   // Onboarding si no hay personajes monitoreados
   if (characterNames.length === 0) {
     return <Onboarding />
@@ -104,7 +86,7 @@ export default function Dashboard() {
 
           {/* Botón rápido dashed para agregar */}
           <div
-            onClick={handlePromptAdd}
+            onClick={openAddCharacterModal}
             className="border-2 border-dashed border-[#1f2937] hover:border-slate-600 rounded-2xl p-4 flex items-center justify-center gap-2 cursor-pointer text-slate-500 hover:text-slate-300 transition-all h-16"
           >
             <span className="text-lg font-bold leading-none">+</span>

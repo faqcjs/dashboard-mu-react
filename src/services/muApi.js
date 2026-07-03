@@ -48,6 +48,9 @@ export function posColor(pos) {
 }
 
 export function classInfo(id) {
+  if (id === 'all') {
+    return { name: 'Todas las Razas', filter: '' }
+  }
   return CLASS_MAP[id] || { name: 'Clase ' + id, filter: 'sum' }
 }
 
