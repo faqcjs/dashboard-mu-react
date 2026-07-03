@@ -84,14 +84,6 @@ export default function Dashboard() {
             <AccountStatusCard key={name} name={name} />
           ))}
 
-          {/* Botón rápido dashed para agregar */}
-          <div
-            onClick={openAddCharacterModal}
-            className="border-2 border-dashed border-[#1f2937] hover:border-slate-600 rounded-2xl p-4 flex items-center justify-center gap-2 cursor-pointer text-slate-500 hover:text-slate-300 transition-all h-16"
-          >
-            <span className="text-lg font-bold leading-none">+</span>
-            <span className="text-xs font-semibold uppercase tracking-wider">Añadir cuenta</span>
-          </div>
         </div>
       </div>
 
@@ -121,6 +113,17 @@ export default function Dashboard() {
           isLoading={isLoading}
           onLocationStatusChange={handleLocationStatusChange}
         />
+
+        {/* Botón rápido dashed para agregar */}
+        <div className="mt-4">
+          <div
+            onClick={openAddCharacterModal}
+            className="border-2 border-dashed border-[#1f2937] hover:border-slate-600 rounded-2xl p-4 flex items-center justify-center gap-2 cursor-pointer text-slate-500 hover:text-slate-300 transition-all h-16"
+          >
+            <span className="text-lg font-bold leading-none">+</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">Añadir cuenta</span>
+          </div>
+        </div>
       </div>
 
       {/* Drawer deslizante derecho de inspección */}
