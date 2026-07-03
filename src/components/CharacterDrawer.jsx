@@ -43,14 +43,13 @@ export default function CharacterDrawer({ name, onClose }) {
   return (
     <div
       onClick={(e) => e.target === e.currentTarget && onClose()}
-      className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm transition-opacity duration-300"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in"
     >
       <div
-        className="w-full max-w-md bg-[#11131e] border-l border-[#1f2937] h-full shadow-2xl flex flex-col animate-slide-in"
-        style={{ maxHeight: '100vh' }}
+        className="w-full max-w-md bg-gradient-to-br from-[#110a1f] to-[#0d0e15] border border-[#1f2937] rounded-3xl shadow-2xl flex flex-col animate-fade-in relative max-h-[85vh]"
       >
         {/* Cabecera del Drawer */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#1f2937] shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-white/5 shrink-0">
           <div>
             <div className="cinzel text-base font-bold text-[#34d399]">{isLoading ? 'Cargando...' : ch.name || name}</div>
             {!isLoading && <div className="text-xs text-[#c084fc]/70 mt-0.5">{info.name}</div>}

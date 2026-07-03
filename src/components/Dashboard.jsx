@@ -6,10 +6,11 @@ import { fetchProfile, fetchRanking, classInfo } from '../services/muApi'
 import Onboarding from './Onboarding'
 import AccountStatusCard from './AccountStatusCard'
 import CharacterCard from './CharacterCard'
+import CharacterCompactCard from './CharacterCompactCard'
 import CharacterDrawer from './CharacterDrawer'
 
 export default function Dashboard() {
-  const { characterNames, selectedCharacterName } = useCharacterStore()
+  const { characterNames, selectedCharacterName, setSelectedCharacterName } = useCharacterStore()
   const { openAddCharacterModal } = useUIStore()
   const [searchInput, setSearchInput] = useState('')
   const [drawerCharacterName, setDrawerCharacterName] = useState(null)
@@ -70,58 +71,110 @@ export default function Dashboard() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
 
-      {/* Sección 1: Ficha Detallada del Personaje Activo */}
-      <div>
+      {/* DISPOSITIVOS MÓVILES (md:hidden) */}
+      <div className="block md:hidden space-y-6">
+        {/* Sección 1: Ficha Detallada del Personaje Activo */}
+        <div>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
+              Estadísticas Detalladas
+            </h3>
+
+            {/* Pequeño buscador de perfiles rápido */}
+            <form onSubmit={handleSearchSubmit} className="flex gap-2">
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="Buscar personaje..."
+                className="bg-white/5 border border-[#1f2937] rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#c084fc]/50 transition-colors w-40"
+              />
+            </form>
+          </div>
+
+          <CharacterCard
+            profileData={profileData}
+            rankingData={rankingData}
+            isLoading={isLoading}
+            onLocationStatusChange={handleLocationStatusChange}
+          />
+        </div>
+
+        {/* Sección 2: Panel de Monitoreo General */}
+        <div>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
+              Monitoreo en Vivo
+            </h3>
+          </div>
+
+          {/* Grid de cuentas en vivo */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {characterNames.map((name) => (
+              <AccountStatusCard key={name} name={name} />
+            ))}
+
+            {/* Botón rápido dashed para agregar */}
+            <div
+              onClick={openAddCharacterModal}
+              className="border border-dashed border-[#1f2937] hover:border-[#c084fc]/40 rounded-2xl flex items-center justify-center gap-1.5 cursor-pointer text-slate-500 hover:text-[#c084fc]/80 transition-all h-16 bg-[#11131e]/30 hover:bg-[#11131e]/50"
+            >
+              <span className="text-base font-bold leading-none">+</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider">Añadir</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* PC / PANTALLAS GRANDES (hidden md:block) */}
+      <div className="hidden md:block space-y-6">
         <div className="flex justify-between items-center mb-3">
           <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
-            Estadísticas Detalladas
+            Monitoreo Detallado
           </h3>
 
-          {/* Pequeño buscador de perfiles rápido */}
+          {/* Buscador de perfiles rápido */}
           <form onSubmit={handleSearchSubmit} className="flex gap-2">
             <input
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Buscar personaje..."
-              className="bg-white/5 border border-[#1f2937] rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#c084fc]/50 transition-colors w-40 sm:w-48"
+              className="bg-white/5 border border-[#1f2937] rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#c084fc]/50 transition-colors w-48"
             />
-            <button type="submit" className="hidden">Buscar</button>
+            <button
+              type="submit"
+              className="bg-[#c084fc]/15 hover:bg-[#c084fc]/25 border border-[#c084fc]/35 text-[#c084fc] rounded-xl px-4 py-1.5 text-xs font-semibold cinzel tracking-wider transition-all"
+            >
+              Buscar
+            </button>
           </form>
         </div>
 
-        <CharacterCard
-          profileData={profileData}
-          rankingData={rankingData}
-          isLoading={isLoading}
-          onLocationStatusChange={handleLocationStatusChange}
-        />
-      </div>
-
-      {/* Sección 2: Panel de Monitoreo General */}
-      <div>
-        <div className="flex justify-between items-center mb-3">
-          <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
-            Monitoreo en Vivo
-          </h3>
-        </div>
-
-        {/* Grid de cuentas en vivo */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        {/* Grid de Tarjetas Detalladas Finas para PC */}
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
           {characterNames.map((name) => (
-            <AccountStatusCard key={name} name={name} />
+            <CharacterCompactCard
+              key={name}
+              name={name}
+              onClick={() => {
+                setSelectedCharacterName(name)
+                setDrawerCharacterName(name)
+              }}
+            />
           ))}
 
-          {/* Botón rápido dashed para agregar */}
+          {/* Botón Añadir Dashed, alto igual a las tarjetas (h-[340px]) */}
           <div
             onClick={openAddCharacterModal}
-            className="border border-dashed border-[#1f2937] hover:border-[#c084fc]/40 rounded-2xl flex items-center justify-center gap-1.5 cursor-pointer text-slate-500 hover:text-[#c084fc]/80 transition-all h-16 bg-[#11131e]/30 hover:bg-[#11131e]/50"
+            className="border border-dashed border-[#1f2937] hover:border-[#c084fc]/40 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer text-slate-500 hover:text-[#c084fc]/80 transition-all h-[340px] bg-[#11131e]/30 hover:bg-[#11131e]/50"
           >
-            <span className="text-base font-bold leading-none">+</span>
-            <span className="text-[10px] font-bold uppercase tracking-wider">Añadir</span>
+            <span className="text-2xl font-bold leading-none">+</span>
+            <span className="text-xs font-bold uppercase tracking-wider">Añadir cuenta</span>
           </div>
         </div>
       </div>
+
 
 
 
