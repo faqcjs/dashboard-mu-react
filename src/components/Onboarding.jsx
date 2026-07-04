@@ -37,9 +37,9 @@ export default function Onboarding() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,.85)', backdropFilter: 'blur(8px)' }}>
-      <div className="w-full max-w-sm rounded-2xl border border-[#c084fc]/30 p-6 card-glow" style={{ background: 'linear-gradient(135deg,#110a1f,#0f1a2e)' }}>
-        <div className="cinzel text-xl font-bold text-[#c084fc] mb-1 tracking-wider text-center">⚔ MU Personajes</div>
-        <p className="text-slate-400 text-sm mb-6 text-center">Ingresá el nombre de tu personaje para empezar.</p>
+      <div className="w-full max-w-sm rounded-2xl border border-[#ea580c]/35 p-6 card-glow" style={{ background: 'linear-gradient(135deg,#120d0b,#0a0807)' }}>
+        <div className="cinzel text-xl font-bold text-[#fbbf24] mb-1 tracking-wider text-center">⚔ MU Personajes</div>
+        <p className="text-[#8c7d70] text-sm mb-6 text-center">Ingresá el nombre de tu personaje para empezar.</p>
         
         <input
           type="text"
@@ -48,7 +48,7 @@ export default function Onboarding() {
           onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
           disabled={isLoading}
           placeholder="Nombre del personaje..."
-          className="w-full bg-white/5 border border-[#1e1e2e] rounded-lg px-4 py-3 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#c084fc]/60 mb-2 transition-colors"
+          className="w-full bg-[#18120f] border border-[#2e221a] rounded-lg px-4 py-3 text-sm text-slate-200 placeholder-[#8c7d70] focus:outline-none focus:border-[#fbbf24]/50 mb-2 transition-colors"
         />
         
         {error && (
@@ -60,13 +60,13 @@ export default function Onboarding() {
         <button
           onClick={handleAdd}
           disabled={isLoading}
-          className="w-full bg-[#c084fc]/20 hover:bg-[#c084fc]/30 border border-[#c084fc]/40 text-[#c084fc] rounded-lg px-4 py-3 text-sm font-semibold cinzel tracking-wider transition-colors disabled:opacity-50"
+          className="w-full bg-[#ea580c]/10 hover:bg-[#ea580c]/20 border border-[#ea580c]/30 text-[#fbbf24] rounded-lg px-4 py-3 text-sm font-semibold cinzel tracking-wider transition-colors disabled:opacity-50"
         >
           {isLoading ? 'Verificando...' : 'Agregar personaje'}
         </button>
         
         {isLoading && (
-          <div className="text-center text-slate-500 text-xs mt-3">Buscando personaje...</div>
+          <div className="text-center text-[#8c7d70] text-xs mt-3">Buscando personaje...</div>
         )}
       </div>
     </div>

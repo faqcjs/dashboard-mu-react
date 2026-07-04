@@ -69,14 +69,14 @@ export default function Dashboard() {
   const isLoading = isProfileLoading || (classId !== undefined && isRankingLoading)
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+    <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
 
       {/* DISPOSITIVOS MÓVILES (md:hidden) */}
       <div className="block md:hidden space-y-6">
         {/* Sección 1: Ficha Detallada del Personaje Activo */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
+            <h3 className="cinzel text-xs text-[#fbbf24] uppercase tracking-[4px]">
               Estadísticas Detalladas
             </h3>
 
@@ -87,7 +87,7 @@ export default function Dashboard() {
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder="Buscar personaje..."
-                className="bg-white/5 border border-[#1f2937] rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#c084fc]/50 transition-colors w-40"
+                className="bg-[#18120f] border border-[#2e221a] rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-[#8c7d70] focus:outline-none focus:border-[#fbbf24]/50 transition-colors w-40"
               />
             </form>
           </div>
@@ -103,7 +103,7 @@ export default function Dashboard() {
         {/* Sección 2: Panel de Monitoreo General */}
         <div>
           <div className="flex justify-between items-center mb-3">
-            <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
+            <h3 className="cinzel text-xs text-[#fbbf24] uppercase tracking-[4px]">
               Monitoreo en Vivo
             </h3>
           </div>
@@ -117,7 +117,7 @@ export default function Dashboard() {
             {/* Botón rápido dashed para agregar */}
             <div
               onClick={openAddCharacterModal}
-              className="border border-dashed border-[#1f2937] hover:border-[#c084fc]/40 rounded-2xl flex items-center justify-center gap-1.5 cursor-pointer text-slate-500 hover:text-[#c084fc]/80 transition-all h-16 bg-[#11131e]/30 hover:bg-[#11131e]/50"
+              className="border border-dashed border-[#2e221a] hover:border-[#fbbf24]/40 rounded-2xl flex items-center justify-center gap-1.5 cursor-pointer text-[#8c7d70] hover:text-[#fbbf24]/80 transition-all h-16 bg-[#120d0b]/30 hover:bg-[#120d0b]/50"
             >
               <span className="text-base font-bold leading-none">+</span>
               <span className="text-[10px] font-bold uppercase tracking-wider">Añadir</span>
@@ -129,7 +129,7 @@ export default function Dashboard() {
       {/* PC / PANTALLAS GRANDES (hidden md:block) */}
       <div className="hidden md:block space-y-6">
         <div className="flex justify-between items-center mb-3">
-          <h3 className="cinzel text-xs text-slate-500 uppercase tracking-[4px]">
+          <h3 className="cinzel text-xs text-[#fbbf24] uppercase tracking-[4px]">
             Monitoreo Detallado
           </h3>
 
@@ -140,11 +140,11 @@ export default function Dashboard() {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Buscar personaje..."
-              className="bg-white/5 border border-[#1f2937] rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#c084fc]/50 transition-colors w-48"
+              className="bg-[#18120f] border border-[#2e221a] rounded-xl px-3 py-1.5 text-xs text-slate-200 placeholder-[#8c7d70] focus:outline-none focus:border-[#fbbf24]/50 transition-colors w-48"
             />
             <button
               type="submit"
-              className="bg-[#c084fc]/15 hover:bg-[#c084fc]/25 border border-[#c084fc]/35 text-[#c084fc] rounded-xl px-4 py-1.5 text-xs font-semibold cinzel tracking-wider transition-all"
+              className="bg-[#ea580c]/10 hover:bg-[#ea580c]/20 border border-[#ea580c]/30 text-[#fbbf24] rounded-xl px-4 py-1.5 text-xs font-semibold cinzel tracking-wider transition-all"
             >
               Buscar
             </button>
@@ -164,13 +164,13 @@ export default function Dashboard() {
             />
           ))}
 
-          {/* Botón Añadir Dashed, alto igual a las tarjetas (h-[340px]) */}
+          {/* Botón Añadir Dashed, alto igual a las tarjetas (h-[520px]) */}
           <div
             onClick={openAddCharacterModal}
-            className="border border-dashed border-[#1f2937] hover:border-[#c084fc]/40 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer text-slate-500 hover:text-[#c084fc]/80 transition-all h-[340px] bg-[#11131e]/30 hover:bg-[#11131e]/50"
+            className="border border-dashed border-[#2e221a] hover:border-[#fbbf24]/40 rounded-3xl flex flex-col items-center justify-center gap-3 cursor-pointer text-[#8c7d70] hover:text-[#fbbf24]/80 transition-all h-[520px] bg-[#120d0b]/30 hover:bg-[#120d0b]/50"
           >
-            <span className="text-2xl font-bold leading-none">+</span>
-            <span className="text-xs font-bold uppercase tracking-wider">Añadir cuenta</span>
+            <span className="text-3xl font-bold leading-none">+</span>
+            <span className="text-sm font-bold uppercase tracking-wider">Añadir personaje</span>
           </div>
         </div>
       </div>

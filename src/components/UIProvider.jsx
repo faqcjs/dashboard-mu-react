@@ -71,11 +71,11 @@ export default function UIProvider() {
           return (
             <div
               key={toast.id}
-              className={`pointer-events-auto flex items-start gap-3 w-full bg-[#11131e] border ${
+              className={`pointer-events-auto flex items-start gap-3 w-full bg-[#120d0b] border ${
                 isSuccess
                   ? 'border-emerald-500/30 shadow-emerald-500/5'
                   : isInfo
-                  ? 'border-[#c084fc]/30 shadow-[#c084fc]/5'
+                  ? 'border-[#ea580c]/30 shadow-[#ea580c]/5'
                   : 'border-red-500/30 shadow-red-500/5'
               } rounded-2xl p-4 shadow-xl backdrop-blur-md transition-all duration-300 transform translate-y-0 animate-fade-in`}
             >
@@ -89,7 +89,7 @@ export default function UIProvider() {
               </div>
               <button
                 onClick={() => removeToast(toast.id)}
-                className="text-slate-500 hover:text-slate-300 font-bold transition-colors text-sm leading-none"
+                className="text-[#8c7d70] hover:text-slate-300 font-bold transition-colors text-sm leading-none"
               >
                 ×
               </button>
@@ -101,17 +101,17 @@ export default function UIProvider() {
       {/* 2. MODAL DE CONFIRMACIÓN */}
       {confirmModal.isOpen && (
         <div className="fixed inset-0 z-[9990] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md bg-gradient-to-br from-[#110a1f] to-[#0d0e15] border border-[#1f2937] hover:border-slate-800 rounded-3xl p-6 shadow-2xl transition-all scale-100">
-            <h4 className="cinzel text-sm font-bold text-[#c084fc] uppercase tracking-[3px] mb-2">
+          <div className="w-full max-w-md bg-gradient-to-br from-[#120d0b] to-[#0a0807] border border-[#2e221a] rounded-3xl p-6 shadow-2xl transition-all scale-100">
+            <h4 className="cinzel text-sm font-bold text-[#fbbf24] uppercase tracking-[3px] mb-2">
               {confirmModal.title || '¿Estás seguro?'}
             </h4>
-            <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+            <p className="text-xs text-[#8c7d70] mb-6 leading-relaxed">
               {confirmModal.message}
             </p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => closeConfirm(false)}
-                className="px-4 py-2 text-xs font-semibold text-slate-400 hover:text-slate-200 bg-white/5 hover:bg-white/10 rounded-xl transition-all"
+                className="px-4 py-2 text-xs font-semibold text-[#8c7d70] hover:text-slate-200 bg-white/5 hover:bg-white/10 rounded-xl transition-all"
               >
                 Cancelar
               </button>
@@ -129,23 +129,23 @@ export default function UIProvider() {
       {/* 3. MODAL DE AGREGAR PERSONAJE */}
       {addCharacterModalOpen && (
         <div className="fixed inset-0 z-[9990] flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-sm bg-gradient-to-br from-[#110a1f] to-[#0d0e15] border border-[#c084fc]/20 rounded-3xl p-6 shadow-2xl relative">
+          <div className="w-full max-w-sm bg-gradient-to-br from-[#120d0b] to-[#0a0807] border border-[#ea580c]/35 rounded-3xl p-6 shadow-2xl relative">
             <button
               onClick={() => {
                 setCharacterNameInput('')
                 setModalError('')
                 closeAddCharacterModal()
               }}
-              className="absolute top-4 right-4 text-slate-500 hover:text-slate-300 font-bold transition-colors text-lg leading-none"
+              className="absolute top-4 right-4 text-[#8c7d70] hover:text-slate-300 font-bold transition-colors text-lg leading-none"
               disabled={isAdding}
             >
               ×
             </button>
             
-            <h4 className="cinzel text-sm font-bold text-[#c084fc] uppercase tracking-[3px] mb-1 text-center">
+            <h4 className="cinzel text-sm font-bold text-[#fbbf24] uppercase tracking-[3px] mb-1 text-center">
               Monitorear Personaje
             </h4>
-            <p className="text-[11px] text-slate-500 mb-5 text-center">
+            <p className="text-[11px] text-[#8c7d70] mb-5 text-center">
               Ingresá el nombre oficial del personaje para agregarlo al panel.
             </p>
 
@@ -157,7 +157,7 @@ export default function UIProvider() {
                   onChange={(e) => setCharacterNameInput(e.target.value)}
                   placeholder="Nombre del personaje..."
                   disabled={isAdding}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-[#c084fc]/50 transition-colors"
+                  className="w-full bg-[#18120f] border border-[#2e221a] rounded-xl px-4 py-3 text-xs text-slate-200 placeholder-[#8c7d70] focus:outline-none focus:border-[#fbbf24]/50 transition-colors"
                   autoFocus
                 />
                 {modalError && (
@@ -170,11 +170,11 @@ export default function UIProvider() {
               <button
                 type="submit"
                 disabled={isAdding}
-                className="w-full bg-[#c084fc]/20 hover:bg-[#c084fc]/30 border border-[#c084fc]/40 text-[#c084fc] rounded-xl px-4 py-3 text-xs font-semibold cinzel tracking-wider transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-[#ea580c]/20 hover:bg-[#ea580c]/30 border border-[#ea580c]/40 text-[#fbbf24] rounded-xl px-4 py-3 text-xs font-semibold cinzel tracking-wider transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isAdding ? (
                   <>
-                    <span className="w-3.5 h-3.5 border-2 border-t-transparent border-[#c084fc] rounded-full animate-spin"></span>
+                    <span className="w-3.5 h-3.5 border-2 border-t-transparent border-[#fbbf24] rounded-full animate-spin"></span>
                     <span>Verificando...</span>
                   </>
                 ) : (

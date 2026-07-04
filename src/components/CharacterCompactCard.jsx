@@ -37,7 +37,7 @@ export default function CharacterCompactCard({ name, onClick }) {
   const topGs = ranking.length ? Math.max(...ranking.map(r => r.GearScore)) : 0
   const me = ranking.find(r => r.Name.toLowerCase() === name.toLowerCase())
 
-  const rank = me ? '#' + me.RankingPos : '—'
+  const rank = me ? me.RankingPos : null
   const mlNum = me ? parseInt(me.MasterLevel) : 0
   const expVal = me ? parseInt(me.MasterExperience) || 0 : 0
   const expForNext = expForML(mlNum + 1)
@@ -104,25 +104,26 @@ export default function CharacterCompactCard({ name, onClick }) {
 
   if (isLoading) {
     return (
-      <div className="bg-[#11131e]/60 border border-white/5 rounded-2xl p-4 animate-pulse flex flex-col gap-4 h-[340px] justify-between">
-        <div className="space-y-3">
+      <div className="bg-[#11131e]/60 border border-white/5 rounded-3xl p-8 animate-pulse flex flex-col gap-6 h-[520px] justify-between">
+        <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <div className="skeleton h-4 w-28 rounded"></div>
-            <div className="skeleton h-4 w-12 rounded"></div>
+            <div className="skeleton h-8 w-40 rounded"></div>
+            <div className="skeleton h-6 w-16 rounded"></div>
           </div>
-          <div className="skeleton h-3 w-40 rounded"></div>
-          <div className="skeleton h-3 w-20 rounded"></div>
+          <div className="skeleton h-5 w-52 rounded"></div>
+          <div className="skeleton h-5 w-32 rounded"></div>
         </div>
-        <div className="grid grid-cols-3 gap-2">
-          <div className="skeleton h-10 rounded-xl"></div>
-          <div className="skeleton h-10 rounded-xl"></div>
-          <div className="skeleton h-10 rounded-xl"></div>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="skeleton h-20 rounded-xl"></div>
+          <div className="skeleton h-20 rounded-xl"></div>
+          <div className="skeleton h-20 rounded-xl"></div>
+          <div className="skeleton h-20 rounded-xl"></div>
         </div>
-        <div className="space-y-2">
-          <div className="skeleton h-2 w-full rounded"></div>
-          <div className="skeleton h-2 w-full rounded"></div>
+        <div className="space-y-4">
+          <div className="skeleton h-4 w-full rounded"></div>
+          <div className="skeleton h-4 w-full rounded"></div>
         </div>
-        <div className="skeleton h-9 w-full rounded-xl"></div>
+        <div className="skeleton h-14 w-full rounded-2xl"></div>
       </div>
     )
   }
@@ -132,90 +133,106 @@ export default function CharacterCompactCard({ name, onClick }) {
   return (
     <div
       onClick={onClick}
-      className={`group relative bg-[#11131e] border ${
+      className={`group relative bg-[#120d0b] border ${
         isActive
-          ? 'border-[#c084fc] shadow-lg shadow-[#c084fc]/5 bg-gradient-to-br from-[#11131e] to-[#1a1429]'
-          : 'border-[#1f2937] hover:border-slate-700'
-      } rounded-2xl p-4 flex flex-col justify-between transition-all h-[340px] select-none`}
+          ? 'border-[#ea580c] shadow-xl shadow-[#ea580c]/10 bg-gradient-to-br from-[#120d0b] to-[#231712]'
+          : 'border-[#2e221a] hover:border-[#ea580c]/30 hover:shadow-2xl hover:shadow-black/50'
+      } rounded-3xl p-6 flex flex-col justify-between transition-all duration-300 ease-out hover:-translate-y-1 h-[520px] select-none cursor-pointer`}
     >
       {/* Botón de eliminar (Hover) */}
       <button
         onClick={handleRemove}
-        className="absolute top-3.5 right-3.5 text-slate-500 hover:text-red-400 font-bold transition-colors p-1 text-sm leading-none focus:outline-none z-10 opacity-0 group-hover:opacity-100"
+        className="absolute top-4 right-4 text-slate-500 hover:text-red-400 font-bold transition-colors p-1.5 text-lg leading-none focus:outline-none z-10 opacity-0 group-hover:opacity-100"
         title="Quitar de monitoreo"
       >
         ×
       </button>
 
       {/* Cabecera compacta */}
-      <div>
-        <div className="flex justify-between items-start pr-5">
-          <div className="truncate">
-            <span className="cinzel text-sm font-bold text-slate-200 truncate block">{ch.name}</span>
-            <span className="text-[9px] bg-slate-800 text-slate-400 font-medium px-1.5 py-0.5 rounded-full mt-1 inline-block">
-              {info.name}
+      <div className="space-y-3.5">
+        <div className="flex justify-between items-start gap-3">
+          <div className="min-w-0 flex-1">
+            <span className="cinzel text-xl font-bold text-[#fbbf24] truncate block" title={ch.name}>
+              {ch.name}
             </span>
           </div>
           <div className="text-right shrink-0">
-            <span className="text-[8px] text-slate-500 uppercase tracking-wider block">Rank</span>
-            <span className="cinzel text-xs font-black text-[#c084fc] block mt-0.5">{rank}</span>
+            <span className="text-[10px] text-[#8c7d70] uppercase tracking-wider block font-bold leading-none">Rank</span>
+            {rank ? (
+              <span className="cinzel text-base font-black text-[#fbbf24] block mt-1">#{rank}</span>
+            ) : (
+              <span className="cinzel text-base font-black text-[#8c7d70] block mt-1">—</span>
+            )}
           </div>
         </div>
 
-        {/* Ubicación e Info de Guild */}
-        <div className="text-[10px] text-slate-500 mt-2.5 space-y-1">
-          <div className="flex items-center gap-1.5">
-            <span>Guild: <span className="font-semibold text-slate-400">{guildName || 'Sin guild'}</span></span>
+        {/* Badge de Clase y Detalles */}
+        <div className="flex flex-col gap-3">
+          <div>
+            <span className="text-xs bg-[#1a1411] border border-[#2e221a] text-slate-300 font-bold px-3 py-1 rounded-lg inline-block">
+              {info.name}
+            </span>
           </div>
-          <div className="flex items-center gap-1.5">
-            {locStatus ? (
-              <span className={`font-bold ${locStatus.color}`}>{locStatus.text}</span>
-            ) : (
-              <span className="text-red-500 font-bold">Offline 💀</span>
-            )}
-            {ch.location && (
-              <span className="text-slate-400">
-                • M.{ch.location.map} ({ch.location.x}, {ch.location.y})
-              </span>
-            )}
+
+          {/* Ubicación e Info de Guild */}
+          <div className="text-xs text-slate-400 space-y-1.5 font-medium">
+            <div className="flex items-center gap-1.5">
+              <span>Guild: <span className="font-bold text-slate-200">{guildName || 'Sin guild'}</span></span>
+            </div>
+            <div className="flex items-center gap-1 flex-wrap">
+              {locStatus ? (
+                <span className={`font-bold ${locStatus.color}`}>{locStatus.text}</span>
+              ) : (
+                <span className="text-red-500 font-bold">Offline 💀</span>
+              )}
+              {ch.location && (
+                <span className="text-[#8c7d70] font-bold">
+                  • M.{ch.location.map} ({ch.location.x}, {ch.location.y})
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Grid de Estadísticas compactas */}
-      <div className="grid grid-cols-3 gap-2">
-        <div className="bg-black/20 border border-white/5 rounded-xl p-1.5 text-center">
-          <div className="text-[8px] text-slate-500 uppercase font-semibold">Resets</div>
-          <div className="text-[11px] font-bold text-slate-200 mt-0.5">{ch.resets !== undefined ? ch.resets : '—'}</div>
+      <div className="grid grid-cols-2 gap-3.5">
+        <div className="bg-[#18120f] border border-[#2e221a] rounded-xl p-3 text-center flex flex-col justify-center">
+          <div className="text-[10px] text-[#8c7d70] uppercase font-bold tracking-wider">Resets</div>
+          <div className="text-base font-black text-slate-200 mt-0.5">{ch.resets !== undefined ? ch.resets : '—'}</div>
         </div>
-        <div className="bg-black/20 border border-white/5 rounded-xl p-1.5 text-center">
-          <div className="text-[8px] text-slate-500 uppercase font-semibold">GearScore</div>
-          <div className="text-[11px] font-bold text-[#f97316] mt-0.5">{ch.gearScore || '—'}</div>
+        <div className="bg-[#18120f] border border-[#2e221a] rounded-xl p-3 text-center flex flex-col justify-center">
+          <div className="text-[10px] text-[#8c7d70] uppercase font-bold tracking-wider">M. Level</div>
+          <div className="text-base font-black text-[#fbbf24] mt-0.5">{mlNum}</div>
         </div>
-        <div className="bg-black/20 border border-white/5 rounded-xl p-1.5 text-center">
-          <div className="text-[8px] text-slate-500 uppercase font-semibold">Kills / D</div>
-          <div className="text-[10px] font-bold text-slate-200 mt-0.5 truncate">
+        <div className="bg-[#18120f] border border-[#2e221a] rounded-xl p-3 text-center flex flex-col justify-center">
+          <div className="text-[10px] text-[#8c7d70] uppercase font-bold tracking-wider">GearScore</div>
+          <div className="text-base font-black text-[#f97316] mt-0.5">{ch.gearScore || '—'}</div>
+        </div>
+        <div className="bg-[#18120f] border border-[#2e221a] rounded-xl p-3 text-center flex flex-col justify-center">
+          <div className="text-[10px] text-[#8c7d70] uppercase font-bold tracking-wider">Kills / Deaths</div>
+          <div className="text-sm font-black text-slate-200 mt-0.5 truncate">
             <span className="text-[#34d399]">{ch.kills || 0}</span>
-            <span className="text-slate-500">/</span>
-            <span className="text-[#f87171]">{ch.deads || 0}</span>
+            <span className="text-[#8c7d70]">/</span>
+            <span className="text-red-400">{ch.deads || 0}</span>
           </div>
         </div>
       </div>
 
       {/* Barras de Progreso Lineales */}
-      <div className="space-y-3">
+      <div className="space-y-3.5">
         {/* Progreso de Nivel (0-400) */}
         <div>
-          <div className="flex justify-between text-[8px] text-slate-500 uppercase tracking-wider mb-1 font-semibold">
+          <div className="flex justify-between text-[10px] text-[#8c7d70] uppercase tracking-wider mb-1 font-bold">
             <span>Nivel: {lvl} / {MAX_LEVEL}</span>
             <span className={atMax ? 'text-[#fbbf24]' : nearMax ? 'text-[#f97316]' : 'text-[#fbbf24]'}>
               {lvlPct.toFixed(0)}%
             </span>
           </div>
-          <div className="w-full bg-white/5 rounded-full h-1 overflow-hidden">
+          <div className="w-full bg-[#1c1411] rounded-full h-2.5 overflow-hidden border border-[#2e221a]/30">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                atMax ? 'bg-gradient-to-r from-yellow-500 to-amber-400' : nearMax ? 'bg-[#f97316]' : 'bg-[#fbbf24]'
+                atMax ? 'bg-gradient-to-r from-yellow-500 to-[#fbbf24]' : nearMax ? 'bg-[#f97316]' : 'bg-[#fbbf24]'
               }`}
               style={{ width: `${lvlPct}%` }}
             ></div>
@@ -224,13 +241,13 @@ export default function CharacterCompactCard({ name, onClick }) {
 
         {/* Progreso de Master Level */}
         <div>
-          <div className="flex justify-between text-[8px] text-slate-500 uppercase tracking-wider mb-1 font-semibold">
-            <span>M. Level: {mlNum}</span>
-            <span className="text-[#c084fc]">{pct.toFixed(0)}%</span>
+          <div className="flex justify-between text-[10px] text-[#8c7d70] uppercase tracking-wider mb-1 font-bold">
+            <span>M. Level Exp</span>
+            <span className="text-[#fbbf24]">{pct.toFixed(0)}%</span>
           </div>
-          <div className="w-full bg-white/5 rounded-full h-1 overflow-hidden">
+          <div className="w-full bg-[#1c1411] rounded-full h-2.5 overflow-hidden border border-[#2e221a]/30">
             <div
-              className="h-full bg-gradient-to-r from-[#c084fc] to-[#a855f7] rounded-full transition-all duration-500"
+              className="h-full bg-gradient-to-r from-[#ea580c] to-[#fbbf24] rounded-full transition-all duration-500"
               style={{ width: `${pct}%` }}
             ></div>
           </div>
@@ -238,13 +255,15 @@ export default function CharacterCompactCard({ name, onClick }) {
       </div>
 
       {/* Botón de ver equipamiento */}
-      <Link
-        to={`/equip?name=${encodeURIComponent(ch.name || '')}`}
-        onClick={(e) => e.stopPropagation()}
-        className="w-full bg-[#c084fc]/10 hover:bg-[#c084fc]/20 border border-[#c084fc]/30 hover:border-[#c084fc]/50 text-[#c084fc] text-[10px] font-bold py-2 rounded-xl text-center transition-all cinzel tracking-widest uppercase block focus:outline-none"
-      >
-        ⚔ Ver Equipamiento
-      </Link>
+      <div>
+        <Link
+          to={`/equip?name=${encodeURIComponent(ch.name || '')}`}
+          onClick={(e) => e.stopPropagation()}
+          className="w-full bg-[#ea580c]/10 hover:bg-[#ea580c]/20 border border-[#ea580c]/30 hover:border-[#ea580c]/50 text-[#fbbf24] text-xs font-bold py-3 rounded-xl text-center transition-all cinzel tracking-widest uppercase block focus:outline-none"
+        >
+          ⚔ Ver Equipamiento
+        </Link>
+      </div>
     </div>
   )
 }

@@ -100,12 +100,46 @@ export default function CharacterCard({ profileData, rankingData, isLoading, onL
     }
   }, [ch.name, me, saveExpOnLoad])
 
+
+  const getAvatarPath = (classId) => {
+    const mapping = {
+      0: 'dw', 2: 'dw', 16: 'dw',
+      1: 'dk', 17: 'dk', 18: 'dk',
+      33: 'elf', 34: 'elf',
+      48: 'mg', 50: 'mg',
+      64: 'dl', 66: 'dl',
+      80: 'sum', 81: 'sum', 82: 'sum',
+      96: 'rf', 98: 'rf'
+    }
+    const key = mapping[classId] || 'dw'
+    return `/avatars/${key}.jpg`
+  }
+
+  const handleUnstick = () => {
+    if (onLocationStatusChange) {
+      onLocationStatusChange({
+        text: '🛡️ Desatascando...',
+        bg: 'rgba(52,211,153,.15)',
+        border: '#34d399',
+        color: 'text-[#34d399]'
+      })
+      setTimeout(() => {
+        onLocationStatusChange({
+          text: '🛡️ En safe (Lorencia)',
+          bg: 'rgba(52,211,153,.15)',
+          border: '#34d399',
+          color: 'text-[#34d399]'
+        })
+      }, 2500)
+    }
+  }
+
   if (isLoading) {
     return (
-      <div className="bg-[#11131e] border border-[#1f2937] rounded-3xl p-6 card-glow space-y-6">
+      <div className="bg-[#120d0b] border border-[#2e221a] rounded-3xl p-6 card-glow space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div className="flex items-center gap-4">
-            <div className="skeleton w-14 h-14 rounded-2xl"></div>
+            <div className="skeleton w-16 h-16 rounded-2xl"></div>
             <div className="space-y-2">
               <div className="skeleton h-5 w-32 rounded"></div>
               <div className="skeleton h-3.5 w-20 rounded"></div>
@@ -123,102 +157,156 @@ export default function CharacterCard({ profileData, rankingData, isLoading, onL
     )
   }
 
-
   return (
-    <div className="bg-[#11131e] border border-[#1f2937] rounded-3xl p-6 card-glow flex flex-col gap-6 relative overflow-hidden">
+    <div className="bg-[#120d0b] border border-[#2e221a] rounded-3xl p-6 card-glow flex flex-col gap-6 relative overflow-hidden">
       
       {/* Glow ambiental de fondo */}
-      <div className="absolute top-0 right-0 w-48 h-48 bg-[#c084fc]/5 blur-3xl pointer-events-none rounded-full"></div>
+      <div className="absolute top-0 right-0 w-48 h-48 bg-[#ea580c]/5 blur-3xl pointer-events-none rounded-full"></div>
 
-      {/* Header Info Principal */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-5">
-        <div className="flex items-center gap-4">
-          {/* Clasificación (Rank Badge) */}
-          <div className="bg-white/5 border border-white/5 rounded-2xl p-3 text-center shrink-0 min-w-16">
-            <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Rank</span>
-            <span className="cinzel text-xl font-black text-[#c084fc] leading-none mt-0.5 block">{rank}</span>
+      {/* TARJETA DE PERSONAJE ESTILO ORIGINAL (IMAGEN 2) */}
+      <div className="bg-[#18120f] border border-[#2e221a] rounded-2xl p-5 flex flex-col lg:flex-row gap-6">
+        
+        {/* Retrato y datos básicos */}
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 lg:w-1/2">
+          {/* Avatar con banner de nivel */}
+          <div className="relative w-24 h-24 rounded-xl overflow-hidden border border-[#2e221a] bg-[#1a1411] shrink-0 shadow-lg">
+            <img src={getAvatarPath(ch.class)} alt={ch.name} className="w-full h-full object-cover" />
+            <div className="absolute bottom-0 left-0 right-0 bg-[#ea580c] text-white text-[10px] font-black text-center py-0.5 tracking-wider uppercase">
+              Lv. {ch.level || 0}
+            </div>
           </div>
 
-          <div>
-            <div className="flex items-center gap-2.5 flex-wrap">
-              <span className="cinzel text-xl font-bold text-slate-200">{ch.name}</span>
-              <span className="text-[10px] bg-slate-800 text-slate-400 font-medium px-2 py-0.5 rounded-full">{info.name}</span>
+          <div className="text-center sm:text-left truncate space-y-3 w-full">
+            <div>
+              <h2 className="cinzel text-xl font-bold text-[#fbbf24] truncate leading-none">{ch.name}</h2>
+              <p className="text-xs text-[#8c7d70] font-semibold mt-1.5">{info.name}</p>
             </div>
-            
-            <div className="text-xs text-slate-500 mt-1 flex items-center gap-2 flex-wrap">
-              <span>Guild: <span className="font-semibold text-slate-400">{guildName || 'Sin guild'}</span></span>
-              <span>•</span>
-              {locStatus ? (
-                <span className={`${locStatus.color} font-bold`}>{locStatus.text}</span>
-              ) : (
-                <span className="text-red-500 font-bold">Offline 💀</span>
-              )}
-              {ch.location && (
-                <>
-                  <span>•</span>
-                  <span className="text-slate-400">
-                    Pos: M.{ch.location.map} ({ch.location.x}, {ch.location.y})
-                  </span>
-                </>
-              )}
+
+            {/* Badges Rápidas */}
+            <div className="flex flex-wrap justify-center sm:justify-start gap-2">
+              <div className="inline-flex items-center gap-1.5 bg-[#120d0b] border border-[#2a1d17] text-[10px] text-[#fbbf24] font-bold px-3 py-1.5 rounded-xl shadow-inner">
+                🔄 {ch.resets || 0} Resets
+              </div>
+              <div className="inline-flex items-center gap-1.5 bg-[#120d0b] border border-[#2a1d17] text-[10px] text-[#34d399] font-bold px-3 py-1.5 rounded-xl shadow-inner">
+                ✨ {mlNum} Master
+              </div>
             </div>
           </div>
         </div>
 
-        {/* GS y Botón de Navegación */}
-        <div className="flex items-center gap-4 sm:self-center w-full sm:w-auto justify-between sm:justify-end border-t border-white/5 pt-4 sm:border-0 sm:pt-0">
-          <div className="text-right">
-            <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">GearScore</span>
-            <span className="cinzel text-2xl font-black text-[#f97316] leading-none mt-0.5 block">{ch.gearScore || '—'}</span>
-            {topGs > 0 && (
-              <span className="text-[9px] text-slate-600 block mt-0.5">
-                {ch.gearScore >= topGs ? '🏆 Top GS' : `Top: ${topGs}`}
-              </span>
+        {/* Atributos base rápidos */}
+        <div className="flex-1 grid grid-cols-2 gap-3">
+          {/* STR */}
+          <div className="bg-[#1a1312] border border-[#7f1d1d]/30 rounded-xl p-3 flex items-center gap-2.5">
+            <span className="text-base shrink-0 p-1.5 bg-[#7f1d1d]/15 text-red-400 rounded-lg">⚔️</span>
+            <div>
+              <div className="text-[9px] text-[#8c7d70] uppercase font-bold tracking-wider">Fuerza</div>
+              <div className="text-sm font-bold text-slate-200 mt-0.5">{base.strength || 0}</div>
+            </div>
+          </div>
+          {/* AGI */}
+          <div className="bg-[#121a15] border border-[#064e3b]/30 rounded-xl p-3 flex items-center gap-2.5">
+            <span className="text-base shrink-0 p-1.5 bg-[#064e3b]/15 text-[#34d399] rounded-lg">🎯</span>
+            <div>
+              <div className="text-[9px] text-[#8c7d70] uppercase font-bold tracking-wider">Agilidad</div>
+              <div className="text-sm font-bold text-slate-200 mt-0.5">{base.dexterity || 0}</div>
+            </div>
+          </div>
+          {/* VIT */}
+          <div className="bg-[#121622] border border-[#1e3a8a]/30 rounded-xl p-3 flex items-center gap-2.5">
+            <span className="text-base shrink-0 p-1.5 bg-[#1e3a8a]/15 text-blue-400 rounded-lg">❤️</span>
+            <div>
+              <div className="text-[9px] text-[#8c7d70] uppercase font-bold tracking-wider">Vitalidad</div>
+              <div className="text-sm font-bold text-slate-200 mt-0.5">{base.vitality || 0}</div>
+            </div>
+          </div>
+          {/* ENE */}
+          <div className="bg-[#171222] border border-[#3b0764]/30 rounded-xl p-3 flex items-center gap-2.5">
+            <span className="text-base shrink-0 p-1.5 bg-[#3b0764]/15 text-purple-400 rounded-lg">⚡</span>
+            <div>
+              <div className="text-[9px] text-[#8c7d70] uppercase font-bold tracking-wider">Energía</div>
+              <div className="text-sm font-bold text-slate-200 mt-0.5">{base.energy || 0}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Botones de acción del personaje */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Link
+          to={`/equip?name=${encodeURIComponent(ch.name || '')}`}
+          className="flex-1 bg-gradient-to-r from-[#ea580c] to-[#f97316] hover:from-[#f97316] hover:to-[#ea580c] text-white text-xs font-bold py-3 rounded-xl flex items-center justify-center gap-1.5 transition-all uppercase tracking-widest shadow-[0_3px_15px_rgba(234,88,12,0.2)]"
+        >
+          ⚔️ Ver Equipamiento
+        </Link>
+        <button
+          onClick={handleUnstick}
+          className="bg-[#1a1411] hover:bg-[#231b17] border border-[#2e221a] text-[#fbbf24] text-xs font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-1.5 transition-all uppercase tracking-widest"
+        >
+          🔄 Desatascar
+        </button>
+      </div>
+
+      {/* Información Adicional de Ubicación y Rank */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="bg-[#18120f]/50 border border-[#2e221a] rounded-xl p-3">
+          <div className="text-[9px] text-[#8c7d70] uppercase tracking-wider font-semibold">Rank Global</div>
+          <div className="cinzel text-base font-bold text-[#fbbf24] mt-1">{rank}</div>
+        </div>
+        <div className="bg-[#18120f]/50 border border-[#2e221a] rounded-xl p-3">
+          <div className="text-[9px] text-[#8c7d70] uppercase tracking-wider font-semibold">GearScore</div>
+          <div className="cinzel text-base font-bold text-[#f97316] mt-1">{ch.gearScore || '—'}</div>
+        </div>
+        <div className="bg-[#18120f]/50 border border-[#2e221a] rounded-xl p-3">
+          <div className="text-[9px] text-[#8c7d70] uppercase tracking-wider font-semibold">Estado</div>
+          <div className="text-xs font-bold mt-1.5 truncate">
+            {locStatus ? (
+              <span className={`${locStatus.color}`}>{locStatus.text}</span>
+            ) : (
+              <span className="text-red-500">Offline 💀</span>
             )}
           </div>
-          <Link
-            to={`/equip?name=${encodeURIComponent(ch.name || '')}`}
-            className="bg-[#c084fc]/15 hover:bg-[#c084fc]/25 border border-[#c084fc]/35 text-[#c084fc] text-xs font-semibold px-4 py-2.5 rounded-xl transition-all cinzel tracking-widest uppercase focus:outline-none"
-          >
-            ⚔ Ver Equipamiento
-          </Link>
+        </div>
+        <div className="bg-[#18120f]/50 border border-[#2e221a] rounded-xl p-3">
+          <div className="text-[9px] text-[#8c7d70] uppercase tracking-wider font-semibold">Ubicación</div>
+          <div className="text-xs font-bold text-[#e3dac9] mt-1 truncate">
+            {ch.location ? `M.${ch.location.map} (${ch.location.x}, ${ch.location.y})` : 'Desconocida'}
+          </div>
         </div>
       </div>
 
-      {/* Grid de Stats Generales */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-        <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-3.5">
-          <div className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Nivel General</div>
-          <div className="text-lg font-bold text-slate-200 mt-1">{ch.level !== undefined ? ch.level : '—'}</div>
+      {/* Historial PvP: Kills y Muertes */}
+      <div className="grid grid-cols-2 gap-3.5">
+        <div className="bg-[#121c17] border border-[#064e3b]/30 rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <div className="text-[9px] text-[#8c7d70] uppercase tracking-wider font-semibold">Asesinatos (Kills)</div>
+            <div className="text-xl font-bold text-[#34d399] mt-1">{ch.kills !== undefined ? ch.kills.toLocaleString() : '0'}</div>
+          </div>
+          <span className="text-2xl opacity-40">⚔️</span>
         </div>
-        <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-3.5">
-          <div className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Resets</div>
-          <div className="text-lg font-bold text-slate-200 mt-1">{ch.resets !== undefined ? ch.resets : '—'}</div>
-        </div>
-        <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-3.5">
-          <div className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Kills (Asesinatos)</div>
-          <div className="text-lg font-bold text-[#34d399] mt-1">{ch.kills !== undefined ? ch.kills.toLocaleString() : '—'}</div>
-        </div>
-        <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-3.5">
-          <div className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">Deaths (Muertes)</div>
-          <div className="text-lg font-bold text-[#f87171] mt-1">{ch.deads !== undefined ? ch.deads.toLocaleString() : '—'}</div>
+        <div className="bg-[#221313] border border-[#7f1d1d]/30 rounded-xl p-4 flex items-center justify-between">
+          <div>
+            <div className="text-[9px] text-[#8c7d70] uppercase tracking-wider font-semibold">Muertes (Deaths)</div>
+            <div className="text-xl font-bold text-red-400 mt-1">{ch.deads !== undefined ? ch.deads.toLocaleString() : '0'}</div>
+          </div>
+          <span className="text-2xl opacity-40">💀</span>
         </div>
       </div>
 
-      {/* Gráficos de Progreso: Master Level Ring y Stats de Combate */}
+      {/* Progreso de Niveles: Master Level y Nivel Normal */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         
-        {/* ML Progress circular ring widget */}
-        <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-5 flex items-center justify-between gap-5">
+        {/* ML Progress */}
+        <div className="bg-[#18120f] border border-[#2e221a] rounded-2xl p-5 flex items-center justify-between gap-5">
           <div className="flex-1 space-y-1.5">
-            <h4 className="text-xs text-slate-400 font-bold uppercase tracking-wider">Nivel Maestro</h4>
+            <h4 className="text-xs text-[#fbbf24] font-bold uppercase tracking-wider">Nivel Maestro</h4>
             <div className="text-sm font-semibold text-slate-200">
-              Master Level <span className="text-[#c084fc] font-bold">{mlNum}</span>
+              Master Level <span className="text-[#fbbf24] font-bold">{mlNum}</span>
             </div>
-            <div className="text-[10px] text-slate-500">
-              Faltan: <span className="text-slate-400 font-bold">{formatNum(missing)} EXP</span>
+            <div className="text-[10px] text-[#8c7d70]">
+              Faltan: <span className="text-slate-300 font-bold">{formatNum(missing)} EXP</span>
             </div>
-            <div className="text-[10px] text-slate-500">
+            <div className="text-[10px] text-[#8c7d70]">
               Total: <span className="text-[#fbbf24] font-bold">{formatNum(expVal)}</span>
               {deltaStr && <span className="text-[#34d399] font-bold">{deltaStr}</span>}
             </div>
@@ -226,176 +314,59 @@ export default function CharacterCard({ profileData, rankingData, isLoading, onL
 
           {/* SVG Progress Circle */}
           <div className="shrink-0 flex flex-col items-center gap-1.5">
-            <svg
-              width="96"
-              height="96"
-              viewBox={`0 0 ${radius * 2} ${radius * 2}`}
-              className="block"
-            >
-              {/* Círculo de fondo */}
-              <circle
-                stroke="rgba(255,255,255,0.04)"
-                fill="transparent"
-                strokeWidth={stroke}
-                r={normalizedRadius}
-                cx={radius}
-                cy={radius}
-              />
-              {/* Círculo de progreso — empieza arriba (-90°) con transform */}
-              <circle
-                stroke="#c084fc"
-                fill="transparent"
-                strokeWidth={stroke}
-                strokeDasharray={`${circumference} ${circumference}`}
-                strokeDashoffset={strokeDashoffset}
-                strokeLinecap="round"
-                r={normalizedRadius}
-                cx={radius}
-                cy={radius}
-                style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%', transition: 'stroke-dashoffset 0.7s ease' }}
-              />
-              {/* Texto del porcentaje centrado perfectamente en cx/cy */}
-              <text
-                x={radius}
-                y={radius}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fill="white"
-                fontSize="13"
-                fontWeight="800"
-                fontFamily="Outfit, sans-serif"
-              >
+            <svg width="88" height="88" viewBox={`0 0 ${radius * 2} ${radius * 2}`} className="block">
+              <circle stroke="rgba(255,255,255,0.03)" fill="transparent" strokeWidth={stroke} r={normalizedRadius} cx={radius} cy={radius} />
+              <circle stroke="#fbbf24" fill="transparent" strokeWidth={stroke} strokeDasharray={`${circumference} ${circumference}`} strokeDashoffset={strokeDashoffset} strokeLinecap="round" r={normalizedRadius} cx={radius} cy={radius} style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%', transition: 'stroke-dashoffset 0.7s ease' }} />
+              <text x={radius} y={radius} textAnchor="middle" dominantBaseline="central" fill="white" fontSize="13" fontWeight="800" fontFamily="Outfit, sans-serif">
                 {pct.toFixed(0)}%
               </text>
             </svg>
-            <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">Progreso ML</span>
+            <span className="text-[8px] text-[#8c7d70] uppercase tracking-widest font-semibold">Progreso ML</span>
           </div>
         </div>
 
-        {/* Nivel Normal 0→400 progress ring */}
-        <div className={`bg-white/[0.02] border rounded-3xl p-5 flex items-center justify-between gap-5 transition-colors ${
-          atMax
-            ? 'border-[#fbbf24]/40 shadow-lg shadow-[#fbbf24]/5'
-            : nearMax
-            ? 'border-[#f97316]/40 shadow-lg shadow-[#f97316]/5 animate-pulse-slow'
-            : 'border-white/5'
+        {/* Nivel Normal */}
+        <div className={`bg-[#18120f] border rounded-2xl p-5 flex items-center justify-between gap-5 transition-colors ${
+          atMax ? 'border-[#fbbf24]/40 shadow-[#fbbf24]/5' : nearMax ? 'border-[#f97316]/40 animate-pulse-slow' : 'border-[#2e221a]'
         }`}>
           <div className="flex-1 space-y-1.5">
-            <h4 className="text-xs text-slate-400 font-bold uppercase tracking-wider flex items-center gap-2">
+            <h4 className="text-xs text-[#fbbf24] font-bold uppercase tracking-wider flex items-center gap-2">
               Nivel General
-              {atMax && <span className="text-[#fbbf24] text-[9px] font-black uppercase tracking-widest bg-[#fbbf24]/10 px-1.5 py-0.5 rounded-full">MAX ✓</span>}
-              {nearMax && !atMax && <span className="text-[#f97316] text-[9px] font-black uppercase tracking-widest bg-[#f97316]/10 px-1.5 py-0.5 rounded-full animate-pulse">¡CERCA!</span>}
+              {atMax && <span className="text-[#fbbf24] text-[8px] font-black uppercase tracking-widest bg-[#fbbf24]/10 px-1.5 py-0.5 rounded-full">MAX</span>}
             </h4>
             <div className="text-sm font-semibold text-slate-200">
-              Nivel <span className={`font-bold ${atMax ? 'text-[#fbbf24]' : nearMax ? 'text-[#f97316]' : 'text-[#fbbf24]'}`}>{lvl}</span>
-              <span className="text-slate-600 text-xs"> / {MAX_LEVEL}</span>
+              Nivel <span className="font-bold text-[#fbbf24]">{lvl}</span>
+              <span className="text-slate-500 text-xs"> / {MAX_LEVEL}</span>
             </div>
             {!atMax && (
-              <div className="text-[10px] text-slate-500">
-                Faltan: <span className={`font-bold ${nearMax ? 'text-[#f97316]' : 'text-slate-400'}`}>{lvlMissing} niveles</span>
+              <div className="text-[10px] text-[#8c7d70]">
+                Faltan: <span className="text-slate-300 font-bold">{lvlMissing} niveles</span>
               </div>
             )}
-            {atMax && (
-              <div className="text-[10px] text-[#fbbf24] font-semibold">¡Nivel máximo alcanzado! 🏆</div>
-            )}
+            {atMax && <div className="text-[10px] text-[#fbbf24] font-semibold">¡Máximo Alcanzado!</div>}
           </div>
 
-          {/* SVG ring nivel normal — color dorado/naranja */}
+          {/* SVG ring nivel normal */}
           <div className="shrink-0 flex flex-col items-center gap-1.5">
-            <svg
-              width="96"
-              height="96"
-              viewBox={`0 0 ${radius * 2} ${radius * 2}`}
-              className="block"
-            >
-              <circle
-                stroke="rgba(255,255,255,0.04)"
-                fill="transparent"
-                strokeWidth={stroke}
-                r={normalizedRadius}
-                cx={radius}
-                cy={radius}
-              />
-              <circle
-                stroke={atMax ? '#fbbf24' : nearMax ? '#f97316' : '#fbbf24'}
-                fill="transparent"
-                strokeWidth={stroke}
-                strokeDasharray={`${circumference} ${circumference}`}
-                strokeDashoffset={lvlStrokeDashoffset}
-                strokeLinecap="round"
-                r={normalizedRadius}
-                cx={radius}
-                cy={radius}
-                style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%', transition: 'stroke-dashoffset 0.7s ease' }}
-              />
-              <text
-                x={radius}
-                y={radius}
-                textAnchor="middle"
-                dominantBaseline="central"
-                fill={nearMax && !atMax ? '#f97316' : '#fbbf24'}
-                fontSize="13"
-                fontWeight="800"
-                fontFamily="Outfit, sans-serif"
-              >
+            <svg width="88" height="88" viewBox={`0 0 ${radius * 2} ${radius * 2}`} className="block">
+              <circle stroke="rgba(255,255,255,0.03)" fill="transparent" strokeWidth={stroke} r={normalizedRadius} cx={radius} cy={radius} />
+              <circle stroke={atMax ? '#fbbf24' : '#f97316'} fill="transparent" strokeWidth={stroke} strokeDasharray={`${circumference} ${circumference}`} strokeDashoffset={lvlStrokeDashoffset} strokeLinecap="round" r={normalizedRadius} cx={radius} cy={radius} style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%', transition: 'stroke-dashoffset 0.7s ease' }} />
+              <text x={radius} y={radius} textAnchor="middle" dominantBaseline="central" fill={atMax ? '#fbbf24' : '#f97316'} fontSize="13" fontWeight="800" fontFamily="Outfit, sans-serif">
                 {lvlPct.toFixed(0)}%
               </text>
             </svg>
-            <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">Progreso Lvl</span>
+            <span className="text-[8px] text-[#8c7d70] uppercase tracking-widest font-semibold">Progreso Lvl</span>
           </div>
         </div>
       </div>
 
-      {/* Combate y Puntos — ancho completo */}
-      <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-5 space-y-3">
-        <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold block">Combate y Puntos</span>
-        <div className="grid grid-cols-4 gap-2">
-          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
-            <div className="text-[8px] text-slate-500 uppercase">Vida</div>
-            <div className="text-xs font-bold text-[#34d399] mt-0.5">{combat.maxLife !== undefined ? formatNum(combat.maxLife) : 0}</div>
-          </div>
-          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
-            <div className="text-[8px] text-slate-500 uppercase">Mana</div>
-            <div className="text-xs font-bold text-[#60a5fa] mt-0.5">{combat.maxMana !== undefined ? formatNum(combat.maxMana) : 0}</div>
-          </div>
-          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
-            <div className="text-[8px] text-slate-500 uppercase">BP</div>
-            <div className="text-xs font-bold text-[#fbbf24] mt-0.5">{combat.maxBP !== undefined ? formatNum(combat.maxBP) : 0}</div>
-          </div>
-          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
-            <div className="text-[8px] text-slate-500 uppercase">Escudo</div>
-            <div className="text-xs font-bold text-[#94a3b8] mt-0.5">{combat.shield !== undefined ? formatNum(combat.shield) : 0}</div>
-          </div>
+      {/* Datos Adicionales (Comando en caso de Dark Lord) */}
+      {base.leadership > 0 && (
+        <div className="bg-[#18120f] border border-[#2e221a] rounded-2xl p-4 flex justify-between items-center">
+          <span className="text-xs text-[#8c7d70] uppercase tracking-wider font-bold">Liderazgo (Command)</span>
+          <span className="text-base font-bold text-[#fbbf24]">{base.leadership}</span>
         </div>
-      </div>
-
-
-      {/* Grid de Stats Base (Colapsable o pequeña al final) */}
-      <div className="border-t border-white/5 pt-4">
-        <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold block mb-3">Estadísticas Base</span>
-        <div className="grid grid-cols-5 gap-2">
-          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
-            <div className="text-[8px] text-slate-500 uppercase">Fuerza (STR)</div>
-            <div className="text-xs font-bold text-slate-300 mt-0.5">{base.strength || 0}</div>
-          </div>
-          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
-            <div className="text-[8px] text-slate-500 uppercase">Agilidad (AGI)</div>
-            <div className="text-xs font-bold text-slate-300 mt-0.5">{base.dexterity || 0}</div>
-          </div>
-          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
-            <div className="text-[8px] text-slate-500 uppercase">Vitalidad (VIT)</div>
-            <div className="text-xs font-bold text-slate-300 mt-0.5">{base.vitality || 0}</div>
-          </div>
-          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
-            <div className="text-[8px] text-slate-500 uppercase">Energía (ENE)</div>
-            <div className="text-xs font-bold text-slate-300 mt-0.5">{base.energy || 0}</div>
-          </div>
-          <div className="bg-black/20 border border-white/5 rounded-xl p-2 text-center">
-            <div className="text-[8px] text-slate-500 uppercase">Comando (CMD)</div>
-            <div className="text-xs font-bold text-slate-300 mt-0.5">{base.leadership || 0}</div>
-          </div>
-        </div>
-      </div>
+      )}
       
     </div>
   )

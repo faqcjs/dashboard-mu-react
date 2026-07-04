@@ -46,19 +46,19 @@ export default function CharacterDrawer({ name, onClose }) {
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in"
     >
       <div
-        className="w-full max-w-md bg-gradient-to-br from-[#110a1f] to-[#0d0e15] border border-[#1f2937] rounded-3xl shadow-2xl flex flex-col animate-fade-in relative max-h-[85vh]"
+        className="w-full max-w-md bg-gradient-to-br from-[#120d0b] to-[#0a0807] border border-[#2e221a] rounded-3xl shadow-2xl flex flex-col animate-fade-in relative max-h-[85vh]"
       >
         {/* Cabecera del Drawer */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/5 shrink-0">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-[#2e221a]/60 shrink-0">
           <div>
-            <div className="cinzel text-base font-bold text-[#34d399]">{isLoading ? 'Cargando...' : ch.name || name}</div>
-            {!isLoading && <div className="text-xs text-[#c084fc]/70 mt-0.5">{info.name}</div>}
+            <div className="cinzel text-base font-bold text-[#fbbf24]">{isLoading ? 'Cargando...' : ch.name || name}</div>
+            {!isLoading && <div className="text-xs text-[#8c7d70] mt-0.5">{info.name}</div>}
           </div>
           <div className="flex items-center gap-3">
             {!isLoading && !isProfileError && ch.name && (
               <Link
                 to={`/equip?name=${encodeURIComponent(ch.name)}`}
-                className="cinzel text-xs font-semibold tracking-wider text-[#c084fc] hover:text-white bg-[#c084fc]/10 hover:bg-[#c084fc]/20 border border-[#c084fc]/45 rounded-lg px-3 py-1.5 transition-all"
+                className="cinzel text-xs font-semibold tracking-wider text-[#fbbf24] hover:text-white bg-[#ea580c]/10 hover:bg-[#ea580c]/20 border border-[#ea580c]/40 rounded-lg px-3 py-1.5 transition-all"
                 onClick={onClose}
               >
                 ⚔ Ver Items
@@ -66,7 +66,7 @@ export default function CharacterDrawer({ name, onClose }) {
             )}
             <button
               onClick={onClose}
-              className="text-slate-500 hover:text-white text-2xl leading-none p-1 focus:outline-none"
+              className="text-[#8c7d70] hover:text-[#fbbf24] text-2xl leading-none p-1 focus:outline-none"
             >
               ×
             </button>
@@ -120,7 +120,7 @@ export default function CharacterDrawer({ name, onClose }) {
           {!isLoading && isProfileError && (
             <div className="text-center py-16 space-y-3">
               <div className="text-red-400 text-xs py-2">No se pudo cargar el perfil del personaje.</div>
-              <button onClick={onClose} className="text-xs text-[#c084fc] hover:underline focus:outline-none">Cerrar</button>
+              <button onClick={onClose} className="text-xs text-[#fbbf24] hover:underline focus:outline-none">Cerrar</button>
             </div>
           )}
 
@@ -130,9 +130,9 @@ export default function CharacterDrawer({ name, onClose }) {
               {/* Sección Top Info */}
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-4">
-                  <div className="text-center bg-white/5 border border-white/5 rounded-xl px-3 py-2">
-                    <div className="cinzel text-2xl font-black text-[#c084fc]">{rank}</div>
-                    <div className="text-[8px] text-slate-500 tracking-[1.5px] uppercase">Rank</div>
+                  <div className="text-center bg-[#18120f] border border-[#2e221a] rounded-xl px-3 py-2">
+                    <div className="cinzel text-2xl font-black text-[#fbbf24]">{rank}</div>
+                    <div className="text-[8px] text-[#8c7d70] tracking-[1.5px] uppercase">Rank</div>
                   </div>
                   <div>
                     <div className="text-xs font-semibold text-slate-300">{guildName || 'Sin guild'}</div>
@@ -140,10 +140,10 @@ export default function CharacterDrawer({ name, onClose }) {
                       {mLoc ? (
                         <span className={`${mLoc.color} font-medium`}>{mLoc.text}</span>
                       ) : (
-                        <span className="text-slate-500 font-medium">Offline</span>
+                        <span className="text-[#8c7d70] font-medium">Offline</span>
                       )}
                       {ch.location && (
-                        <span className="text-[10px] text-slate-500 font-medium">
+                        <span className="text-[10px] text-[#8c7d70] font-medium">
                           ({ch.location.map}:{ch.location.x},{ch.location.y})
                         </span>
                       )}
@@ -152,66 +152,66 @@ export default function CharacterDrawer({ name, onClose }) {
                 </div>
                 <div className="text-right">
                   <div className="cinzel text-xl font-bold text-[#f97316]">{ch.gearScore || '—'}</div>
-                  <div className="text-[8px] text-slate-500 tracking-wider uppercase">GearScore</div>
+                  <div className="text-[8px] text-[#8c7d70] tracking-wider uppercase">GearScore</div>
                 </div>
               </div>
 
               {/* Grid General */}
               <div className="grid grid-cols-3 gap-2">
-                <div className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-center">
-                  <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">ML</div>
-                  <div className="text-sm font-bold text-[#c084fc]">{mlVal}</div>
+                <div className="bg-[#18120f] border border-[#2e221a] rounded-xl p-2.5 text-center">
+                  <div className="text-[9px] text-[#8c7d70] uppercase tracking-wider mb-1">ML</div>
+                  <div className="text-sm font-bold text-[#fbbf24]">{mlVal}</div>
                 </div>
-                <div className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-center">
-                  <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">Resets</div>
+                <div className="bg-[#18120f] border border-[#2e221a] rounded-xl p-2.5 text-center">
+                  <div className="text-[9px] text-[#8c7d70] uppercase tracking-wider mb-1">Resets</div>
                   <div className="text-sm font-bold text-slate-200">{ch.resets !== undefined ? ch.resets : '—'}</div>
                 </div>
-                <div className="bg-white/5 border border-white/5 rounded-xl p-2.5 text-center">
-                  <div className="text-[9px] text-slate-500 uppercase tracking-wider mb-1">Nivel</div>
+                <div className="bg-[#18120f] border border-[#2e221a] rounded-xl p-2.5 text-center">
+                  <div className="text-[9px] text-[#8c7d70] uppercase tracking-wider mb-1">Nivel</div>
                   <div className="text-sm font-bold text-slate-200">{ch.level !== undefined ? ch.level : '—'}</div>
                 </div>
               </div>
 
               {/* Asesinatos y muertes */}
               <div className="grid grid-cols-2 gap-2">
-                <div className="bg-[#34d399]/5 border border-[#34d399]/15 rounded-xl p-3 flex items-center gap-2">
+                <div className="bg-[#121a15] border border-[#064e3b]/30 rounded-xl p-3 flex items-center gap-2">
                   <span className="text-xl">⚔️</span>
                   <div>
-                    <div className="text-[8px] text-slate-500 uppercase tracking-wider">Kills</div>
+                    <div className="text-[8px] text-[#8c7d70] uppercase tracking-wider">Kills</div>
                     <div className="text-sm font-bold text-[#34d399]">{ch.kills !== undefined ? ch.kills.toLocaleString() : '—'}</div>
                   </div>
                 </div>
-                <div className="bg-[#f87171]/5 border border-[#f87171]/15 rounded-xl p-3 flex items-center gap-2">
+                <div className="bg-[#221313] border border-[#7f1d1d]/30 rounded-xl p-3 flex items-center gap-2">
                   <span className="text-xl">💀</span>
                   <div>
-                    <div className="text-[8px] text-slate-500 uppercase tracking-wider">Muertes</div>
-                    <div className="text-sm font-bold text-[#f87171]">{ch.deads !== undefined ? ch.deads.toLocaleString() : '—'}</div>
+                    <div className="text-[8px] text-[#8c7d70] uppercase tracking-wider">Muertes</div>
+                    <div className="text-sm font-bold text-red-400">{ch.deads !== undefined ? ch.deads.toLocaleString() : '—'}</div>
                   </div>
                 </div>
               </div>
 
               {/* Stats base */}
               <div className="space-y-2">
-                <div className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">Stats Base</div>
+                <div className="text-[9px] text-[#8c7d70] uppercase tracking-widest font-semibold">Stats Base</div>
                 <div className="grid grid-cols-5 gap-1">
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 text-center">
-                    <div className="text-[8px] text-slate-500 mb-0.5">STR</div>
+                  <div className="bg-[#18120f] border border-[#2e221a] rounded-lg p-2 text-center">
+                    <div className="text-[8px] text-[#8c7d70] mb-0.5">STR</div>
                     <div className="text-xs font-bold text-slate-200">{base.strength || 0}</div>
                   </div>
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 text-center">
-                    <div className="text-[8px] text-slate-500 mb-0.5">AGI</div>
+                  <div className="bg-[#18120f] border border-[#2e221a] rounded-lg p-2 text-center">
+                    <div className="text-[8px] text-[#8c7d70] mb-0.5">AGI</div>
                     <div className="text-xs font-bold text-slate-200">{base.dexterity || 0}</div>
                   </div>
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 text-center">
-                    <div className="text-[8px] text-slate-500 mb-0.5">VIT</div>
+                  <div className="bg-[#18120f] border border-[#2e221a] rounded-lg p-2 text-center">
+                    <div className="text-[8px] text-[#8c7d70] mb-0.5">VIT</div>
                     <div className="text-xs font-bold text-slate-200">{base.vitality || 0}</div>
                   </div>
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 text-center">
-                    <div className="text-[8px] text-slate-500 mb-0.5">ENE</div>
+                  <div className="bg-[#18120f] border border-[#2e221a] rounded-lg p-2 text-center">
+                    <div className="text-[8px] text-[#8c7d70] mb-0.5">ENE</div>
                     <div className="text-xs font-bold text-slate-200">{base.energy || 0}</div>
                   </div>
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 text-center">
-                    <div className="text-[8px] text-slate-500 mb-0.5">CMD</div>
+                  <div className="bg-[#18120f] border border-[#2e221a] rounded-lg p-2 text-center">
+                    <div className="text-[8px] text-[#8c7d70] mb-0.5">CMD</div>
                     <div className="text-xs font-bold text-slate-200">{base.leadership || 0}</div>
                   </div>
                 </div>
@@ -219,22 +219,22 @@ export default function CharacterDrawer({ name, onClose }) {
 
               {/* Combat stats */}
               <div className="space-y-2">
-                <div className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">Combate</div>
+                <div className="text-[9px] text-[#8c7d70] uppercase tracking-widest font-semibold">Combate</div>
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 flex justify-between items-center">
-                    <span className="text-[9px] text-slate-500 uppercase">Vida</span>
+                  <div className="bg-[#18120f] border border-[#2e221a] rounded-lg p-2 flex justify-between items-center">
+                    <span className="text-[9px] text-[#8c7d70] uppercase">Vida</span>
                     <span className="text-xs font-bold text-[#34d399]">{combat.maxLife !== undefined ? formatNum(combat.maxLife) : 0}</span>
                   </div>
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 flex justify-between items-center">
-                    <span className="text-[9px] text-slate-500 uppercase">Mana</span>
+                  <div className="bg-[#18120f] border border-[#2e221a] rounded-lg p-2 flex justify-between items-center">
+                    <span className="text-[9px] text-[#8c7d70] uppercase">Mana</span>
                     <span className="text-xs font-bold text-[#60a5fa]">{combat.maxMana !== undefined ? formatNum(combat.maxMana) : 0}</span>
                   </div>
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 flex justify-between items-center">
-                    <span className="text-[9px] text-slate-500 uppercase">BP</span>
+                  <div className="bg-[#18120f] border border-[#2e221a] rounded-lg p-2 flex justify-between items-center">
+                    <span className="text-[9px] text-[#8c7d70] uppercase">BP</span>
                     <span className="text-xs font-bold text-[#fbbf24]">{combat.maxBP !== undefined ? formatNum(combat.maxBP) : 0}</span>
                   </div>
-                  <div className="bg-white/5 border border-white/5 rounded-lg p-2 flex justify-between items-center">
-                    <span className="text-[9px] text-slate-500 uppercase">Escudo</span>
+                  <div className="bg-[#18120f] border border-[#2e221a] rounded-lg p-2 flex justify-between items-center">
+                    <span className="text-[9px] text-[#8c7d70] uppercase">Escudo</span>
                     <span className="text-xs font-bold text-[#94a3b8]">{combat.shield !== undefined ? formatNum(combat.shield) : 0}</span>
                   </div>
                 </div>

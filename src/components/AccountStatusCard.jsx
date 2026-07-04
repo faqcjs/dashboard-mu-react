@@ -35,22 +35,22 @@ export default function AccountStatusCard({ name }) {
   return (
     <div
       onClick={() => setSelectedCharacterName(name)}
-      className={`group relative bg-[#11131e] border ${
-        isActive ? 'border-[#c084fc] shadow-lg shadow-[#c084fc]/5 bg-gradient-to-br from-[#11131e] to-[#1a1429]' : 'border-[#1f2937] hover:border-slate-700'
+      className={`group relative bg-[#120d0b] border ${
+        isActive ? 'border-[#ea580c] shadow-lg shadow-[#ea580c]/5 bg-gradient-to-br from-[#120d0b] to-[#231712]' : 'border-[#2e221a] hover:border-[#fbbf24]/20'
       } rounded-2xl p-3.5 flex items-center justify-between cursor-pointer transition-all h-16 select-none`}
     >
       <div className="truncate pr-4">
         <div className="text-xs font-bold text-slate-200 truncate">{name}</div>
-        <div className="text-[10px] text-slate-500 truncate mt-0.5">GS: {ch.gearScore || '—'}</div>
+        <div className="text-[10px] text-[#8c7d70] truncate mt-0.5">GS: {ch.gearScore || '—'}</div>
       </div>
 
       <div className="shrink-0 flex items-center gap-2">
         {locStatus ? (
-          <span className={`text-[10px] font-bold bg-white/5 px-2 py-0.5 rounded ${locStatus.color}`}>
+          <span className={`text-[10px] font-bold bg-[#1a1411] border border-[#2e221a] px-2 py-0.5 rounded ${locStatus.color}`}>
             {locStatus.text.replace(' En safe', 'Safe').replace(' Farmeando', 'Farm')}
           </span>
         ) : (
-          <span className="text-[10px] font-bold text-slate-500 bg-white/5 px-2 py-0.5 rounded">
+          <span className="text-[10px] font-bold text-[#8c7d70] bg-[#1a1411] border border-[#2e221a] px-2 py-0.5 rounded">
             Offline
           </span>
         )}
@@ -64,7 +64,7 @@ export default function AccountStatusCard({ name }) {
               onConfirm: () => removeCharacterName(name)
             })
           }}
-          className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 font-bold transition-opacity p-1 text-sm leading-none focus:outline-none"
+          className="opacity-0 group-hover:opacity-100 text-[#8c7d70] hover:text-red-400 font-bold transition-opacity p-1 text-sm leading-none focus:outline-none"
           title="Eliminar"
         >
           ×

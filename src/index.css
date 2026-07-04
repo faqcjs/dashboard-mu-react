@@ -4,8 +4,9 @@
 
 @layer base {
   body {
-    background: #0a0a0f;
-    font-family: 'Inter', sans-serif;
+    background-color: #0a0807;
+    background-image: radial-gradient(circle at 50% -20%, #1f140e 0%, #0a0807 70%);
+    font-family: 'Outfit', 'Inter', sans-serif;
   }
 }
 
@@ -23,21 +24,21 @@
 }
 
 .card-glow {
-  box-shadow: 0 0 40px rgba(192, 132, 252, .08);
+  box-shadow: 0 0 40px rgba(249, 115, 22, .04);
 }
 
 .tab-active {
-  border-bottom: 2px solid #c084fc;
-  color: #c084fc;
+  border-bottom: 2px solid #f97316;
+  color: #fbbf24;
 }
 
 .tab-inactive {
   border-bottom: 2px solid transparent;
-  color: #64748b;
+  color: #8c7d70;
 }
 
 .skeleton {
-  background: linear-gradient(90deg, #1e1e2e 25%, #2a2a3e 50%, #1e1e2e 75%);
+  background: linear-gradient(90deg, #161210 25%, #241d1a 50%, #161210 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 6px;
@@ -54,17 +55,21 @@ img.pixelated {
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0f;
+  background: #0a0807;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e1e2e;
+  background: #1c140e;
   border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2c1f16;
 }
 
 tbody tr {
