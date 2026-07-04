@@ -106,8 +106,8 @@ export default function Equipamiento() {
           className="w-24 h-24 sm:w-32 sm:h-32 bg-[#18120f]/50 border border-[#2e221a]/85 rounded-3xl flex flex-col items-center justify-center text-[#8c7d70]/80 border-dashed transition-all"
           title={`Slot vacío: ${placeholderName}`}
         >
-          <span className="text-3xl opacity-20">{iconText}</span>
-          <span className="text-[10px] uppercase tracking-widest mt-1.5 font-bold opacity-30">{placeholderName}</span>
+          <span className="text-2xl sm:text-3xl opacity-20">{iconText}</span>
+          <span className="text-[8px] sm:text-[10px] uppercase tracking-wider sm:tracking-widest mt-1 sm:mt-1.5 font-bold opacity-30 px-1 text-center truncate w-full">{placeholderName}</span>
         </div>
       )
     }
@@ -172,29 +172,29 @@ export default function Equipamiento() {
     <div className="min-h-screen pb-16">
       
       {/* Contenedor principal de categorías de Equipamiento */}
-      <div className="max-w-6xl mx-auto px-6 py-12 space-y-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-12 space-y-6 sm:space-y-8">
         
-        <h3 className="cinzel text-base sm:text-lg text-[#fbbf24] text-center uppercase tracking-[5px] mb-12">
+        <h3 className="cinzel text-base sm:text-lg text-[#fbbf24] text-center uppercase tracking-[5px] mb-6 sm:mb-12">
           Equipamiento • <span className="text-slate-200">{name}</span>
         </h3>
 
         {/* 1. SECCIÓN WEAPONS */}
-        <div className="bg-[#120d0b]/80 border border-[#2e221a] rounded-3xl p-8">
-          <h4 className="cinzel text-sm sm:text-base font-bold text-[#fbbf24] uppercase tracking-[4px] border-b border-[#2e221a]/60 pb-3 mb-6">
+        <div className="bg-[#120d0b]/80 border border-[#2e221a] rounded-3xl p-5 sm:p-8">
+          <h4 className="cinzel text-sm sm:text-base font-bold text-[#fbbf24] uppercase tracking-[4px] border-b border-[#2e221a]/60 pb-2 sm:pb-3 mb-4 sm:mb-6">
             Weapons
           </h4>
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-wrap gap-3 sm:gap-6 justify-center">
             {renderSlot(0, 'Arma Der', '🗡️')}
             {renderSlot(1, 'Arma Izq', '🛡️')}
           </div>
         </div>
 
         {/* 2. SECCIÓN ARMOR */}
-        <div className="bg-[#120d0b]/80 border border-[#2e221a] rounded-3xl p-8">
-          <h4 className="cinzel text-sm sm:text-base font-bold text-[#fbbf24] uppercase tracking-[4px] border-b border-[#2e221a]/60 pb-3 mb-6">
+        <div className="bg-[#120d0b]/80 border border-[#2e221a] rounded-3xl p-5 sm:p-8">
+          <h4 className="cinzel text-sm sm:text-base font-bold text-[#fbbf24] uppercase tracking-[4px] border-b border-[#2e221a]/60 pb-2 sm:pb-3 mb-4 sm:mb-6">
             Armor
           </h4>
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-wrap gap-3 sm:gap-6 justify-center">
             {renderSlot(2, 'Casco', '🪖')}
             {renderSlot(3, 'Pechera', '🛡️')}
             {renderSlot(4, 'Pantalón', '👖')}
@@ -204,21 +204,21 @@ export default function Equipamiento() {
         </div>
 
         {/* 3. SECCIÓN WINGS */}
-        <div className="bg-[#120d0b]/80 border border-[#2e221a] rounded-3xl p-8">
-          <h4 className="cinzel text-sm sm:text-base font-bold text-[#fbbf24] uppercase tracking-[4px] border-b border-[#2e221a]/60 pb-3 mb-6">
+        <div className="bg-[#120d0b]/80 border border-[#2e221a] rounded-3xl p-5 sm:p-8">
+          <h4 className="cinzel text-sm sm:text-base font-bold text-[#fbbf24] uppercase tracking-[4px] border-b border-[#2e221a]/60 pb-2 sm:pb-3 mb-4 sm:mb-6">
             Wings
           </h4>
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-wrap gap-3 sm:gap-6 justify-center">
             {renderSlot(7, 'Alas', '🕊️')}
           </div>
         </div>
 
         {/* 4. SECCIÓN ACCESSORIES */}
-        <div className="bg-[#120d0b]/80 border border-[#2e221a] rounded-3xl p-8">
-          <h4 className="cinzel text-sm sm:text-base font-bold text-[#fbbf24] uppercase tracking-[4px] border-b border-[#2e221a]/60 pb-3 mb-6">
+        <div className="bg-[#120d0b]/80 border border-[#2e221a] rounded-3xl p-5 sm:p-8">
+          <h4 className="cinzel text-sm sm:text-base font-bold text-[#fbbf24] uppercase tracking-[4px] border-b border-[#2e221a]/60 pb-2 sm:pb-3 mb-4 sm:mb-6">
             Accessories
           </h4>
-          <div className="flex flex-wrap gap-6">
+          <div className="flex flex-wrap gap-3 sm:gap-6 justify-center">
             {renderSlot(10, 'Anillo R', '💍')}
             {renderSlot(9, 'Pendant', '📿')}
             {renderSlot(8, 'Mascota', '🦄')}
